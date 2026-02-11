@@ -207,17 +207,21 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 116 passed (unit 67 + contract 32 + integration 17: C-012~C-014, I-010)
 
 ### T009: GET /projects/:id/download 엔드포인트 구현
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: ZIP 다운로드 API 구현. 스트리밍 응답.
 - Acceptance Criteria:
-  - [ ] DownloadProject Use Case 구현
-  - [ ] GET /projects/:id/download FastAPI 라우터 구현 (StreamingResponse)
-  - [ ] C-015: generated 프로젝트 → 200, application/zip 테스트
-  - [ ] C-016: 미존재 project_id → 404 테스트
-  - [ ] C-017: 미생성 프로젝트 → 409 테스트
-  - [ ] C-018: UUID 아닌 project_id → 422 테스트
+  - [x] DownloadProject Use Case 구현
+  - [x] GET /projects/:id/download FastAPI 라우터 구현 (StreamingResponse)
+  - [x] C-015: generated 프로젝트 → 200, application/zip 테스트
+  - [x] C-016: 미존재 project_id → 404 테스트
+  - [x] C-017: 미생성 프로젝트 → 409 테스트
+  - [x] C-018: UUID 아닌 project_id → 422 테스트
 - Result:
+  - `backend/src/application/usecases/download_project.py` — DownloadProject use case (존재+generated 검증)
+  - `backend/src/adapters/api/download.py` — GET /projects/{project_id}/download 라우터 (StreamingResponse, Content-Disposition)
+  - `backend/src/config/app.py` — download_router 등록
+  - 테스트: pytest 124 passed (unit 67 + contract 40 + integration 17: C-015~C-018)
 
 ### T010: 공통 에러 핸들링 및 응답 형식 통합
 - Status: Backlog
