@@ -11,6 +11,7 @@
 - `docs/*`: AI may propose edits. Changes require user approval. **All content in docs/ MUST be written in Korean (한글).**
 - `skills/*/SKILL.md`: AI creates and updates. **MUST be written in English.**
 - `.sdwc/skill-templates/*`: Read-only reference. NOT tracked by git.
+- When applying the frontend-design skill, each task's acceptance criteria always take precedence. Apply design on top of meeting accessibility (WCAG AA), browser compatibility, and form usability requirements.
 
 ---
 
