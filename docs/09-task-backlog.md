@@ -51,7 +51,7 @@ Backlog → Ready → In Progress → Review → Done
 ## Tasks
 
 ### T001: 프로젝트 기초 구조 및 Docker Compose 설정
-- Status: Review
+- Status: Done
 - Service: common
 - Description: backend(Poetry/FastAPI), frontend(pnpm/React/Vite) 프로젝트 스캐폴딩 및 docker-compose.yml, Dockerfile 작성. 각 서비스의 /health, /ready 엔드포인트 구현.
 - Acceptance Criteria:
@@ -69,17 +69,26 @@ Backlog → Ready → In Progress → Review → Done
   - Docker Compose AC는 이미지 빌드/기동으로 검증 가능 (docker compose up -d --build)
 
 ### T002: DB 스키마 및 마이그레이션 설정
-- Status: Backlog
+- Status: Review
 - Service: backend_api
 - Description: PostgreSQL에 projects, events 테이블 생성. Alembic 마이그레이션 설정. 연결 풀 및 AsyncSession 구성.
 - Acceptance Criteria:
-  - [ ] Alembic 초기화 및 첫 마이그레이션 스크립트 (up/down)
-  - [ ] projects 테이블 생성 (21-data-design.md 스펙 일치)
-  - [ ] events 테이블 생성 (FK, CASCADE 포함)
-  - [ ] AsyncSession 기반 DB 연결 풀 구성
-  - [ ] I-001: 앱 시작 시 PostgreSQL 연결 성공 테스트
-  - [ ] I-002: DB 연결 실패 시 /ready 비정상 응답 테스트
+  - [x] Alembic 초기화 및 첫 마이그레이션 스크립트 (up/down)
+  - [x] projects 테이블 생성 (21-data-design.md 스펙 일치)
+  - [x] events 테이블 생성 (FK, CASCADE 포함)
+  - [x] AsyncSession 기반 DB 연결 풀 구성
+  - [x] I-001: 앱 시작 시 PostgreSQL 연결 성공 테스트
+  - [x] I-002: DB 연결 실패 시 /ready 비정상 응답 테스트
 - Result:
+  - `backend/alembic.ini`, `backend/migrations/` — Alembic 초기화, 마이그레이션 001 (up/down 검증 완료)
+  - `backend/src/adapters/persistence/models.py` — ProjectModel, EventModel (21-data-design.md 스펙 일치)
+  - `backend/src/config/database.py` — AsyncEngine, async_sessionmaker, check_connection, connect_timeout
+  - `backend/src/config/settings.py` — Pydantic BaseSettings (POSTGRESQL_URL)
+  - `backend/src/adapters/api/health.py` — /ready가 실제 DB 연결 상태 반영
+  - `backend/src/config/app.py` — lifespan으로 DB 초기화/해제
+  - `docker-compose.yml` — postgres ports: 5432:5432 추가 (로컬 개발용)
+  - 테스트: pytest 6 passed (contract 4 + integration 2: I-001, I-002)
+  - 이슈 해결: Windows psycopg3 ProactorEventLoop 비호환 → SelectorEventLoop 정책 적용, 통합 테스트 asyncio 전용
 
 ### T003: Domain 레이어 — 엔티티 및 포트 정의
 - Status: Backlog
