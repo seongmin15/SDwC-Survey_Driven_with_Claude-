@@ -99,7 +99,7 @@ export default function CompletePage() {
 
         {state === 'success' && project && (
           <div className="bg-white rounded-lg shadow-lg p-8">
-            <svg className="w-16 h-16 mx-auto mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="w-16 h-16 mx-auto mb-4 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{project.project_name}</h2>

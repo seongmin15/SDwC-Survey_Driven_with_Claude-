@@ -261,7 +261,7 @@ export default function DynamicForm({
 
       {apiError && (
         <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-600">{apiError}</p>
+          <p className="text-red-700">{apiError}</p>
         </div>
       )}
 
