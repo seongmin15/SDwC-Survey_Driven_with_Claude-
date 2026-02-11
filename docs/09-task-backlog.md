@@ -310,22 +310,28 @@ Backlog → Ready → In Progress → Done
   - 테스트: vitest 39 passed (기존 22 + survey 17: E-004~E-006, V-001~V-006, A-001~A-007)
 
 ### T014: Web UI — Generate 페이지 구현
-- Status: Backlog
+- Status: Done
 - Service: web_ui
 - Description: 문서 생성 트리거 및 진행 상태 표시 페이지 구현.
 - Acceptance Criteria:
-  - [ ] 페이지 진입 시 POST /generate 자동 호출
-  - [ ] 상태 관리 (idle/loading/success/error)
-  - [ ] 성공 시 Complete 페이지로 자동 이동
-  - [ ] 에러 시 재시도 버튼
-  - [ ] project_id 유효성 검증 → 무효 시 Survey 리다이렉트
-  - [ ] E-007: API 500 → error + 재시도 테스트
-  - [ ] E-010: invalid-id 직접 접근 → 리다이렉트 테스트
-  - [ ] E-013: 이미 generated → Complete 리다이렉트 테스트
-  - [ ] E-014: 새로고침 시 상태 복원 테스트
-  - [ ] V-007~V-008: 상태별 시각 테스트
-  - [ ] A-008~A-010: 접근성 테스트
+  - [x] 페이지 진입 시 POST /generate 자동 호출
+  - [x] 상태 관리 (idle/loading/success/error)
+  - [x] 성공 시 Complete 페이지로 자동 이동
+  - [x] 에러 시 재시도 버튼
+  - [x] project_id 유효성 검증 → 무효 시 Survey 리다이렉트
+  - [x] E-007: API 500 → error + 재시도 테스트
+  - [x] E-010: invalid-id 직접 접근 → 리다이렉트 테스트
+  - [x] E-013: 이미 generated → Complete 리다이렉트 테스트
+  - [x] E-014: 새로고침 시 상태 복원 테스트
+  - [x] V-007~V-008: 상태별 시각 테스트
+  - [x] A-008~A-010: 접근성 테스트
 - Result:
+  - `frontend/src/pages/GeneratePage.tsx` — UUID 검증, useEffect 자동 트리거, 상태 관리 (idle/loading/success/error), 409 감지 → Complete 리다이렉트, 재시도 버튼
+  - `frontend/tests/e2e/generate.test.tsx` — E-007, E-010, E-013, E-014 + 자동 트리거/성공 네비게이션 (7 tests)
+  - `frontend/tests/visual/generate-visual.test.tsx` — V-007, V-008 (3 tests)
+  - `frontend/tests/accessibility/generate-a11y.test.tsx` — A-008, A-009, A-010 (5 tests)
+  - `frontend/tests/e2e/navigation.test.tsx` — UUID 형식 project_id로 업데이트
+  - 테스트: vitest 54 passed (기존 39 + generate 15)
 
 ### T015: Web UI — Complete 페이지 구현
 - Status: Backlog

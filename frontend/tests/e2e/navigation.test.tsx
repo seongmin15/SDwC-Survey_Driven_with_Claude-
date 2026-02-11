@@ -33,7 +33,7 @@ describe('E-012: Unknown route redirects to Survey', () => {
 
   it('renders Generate page at /generate/:id', () => {
     render(
-      <MemoryRouter initialEntries={['/generate/test-id']}>
+      <MemoryRouter initialEntries={['/generate/550e8400-e29b-41d4-a716-446655440000']}>
         <App />
       </MemoryRouter>,
     );
