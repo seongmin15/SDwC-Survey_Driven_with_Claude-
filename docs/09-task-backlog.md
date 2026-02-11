@@ -334,26 +334,32 @@ Backlog → Ready → In Progress → Done
   - 테스트: vitest 54 passed (기존 39 + generate 15)
 
 ### T015: Web UI — Complete 페이지 구현
-- Status: Backlog
+- Status: Done
 - Service: web_ui
 - Description: 프로젝트 URL 안내, ZIP 다운로드, URL 복사 기능 구현.
 - Acceptance Criteria:
-  - [ ] GET /projects/:id 호출하여 프로젝트 정보 표시
-  - [ ] ZIP 다운로드 버튼 (GET /projects/:id/download)
-  - [ ] URL 복사 버튼 (클립보드 API)
-  - [ ] "새 프로젝트 시작" 링크 → Survey
-  - [ ] project_id 조회 실패 시 에러 처리
-  - [ ] status가 generated가 아닌 경우 리다이렉트
-  - [ ] E-001: 전체 happy path 테스트
-  - [ ] E-002: URL 복사 테스트
-  - [ ] E-003: 새 프로젝트 시작 테스트
-  - [ ] E-008: 조회 실패 → error 테스트
-  - [ ] E-009: 다운로드 네트워크 실패 테스트
-  - [ ] E-011: intake_saved 상태 직접 접근 → 리다이렉트 테스트
-  - [ ] E-015: 새로고침 시 상태 복원 테스트
-  - [ ] V-009~V-010: 시각 테스트
-  - [ ] A-011~A-013: 접근성 테스트
+  - [x] GET /projects/:id 호출하여 프로젝트 정보 표시
+  - [x] ZIP 다운로드 버튼 (GET /projects/:id/download)
+  - [x] URL 복사 버튼 (클립보드 API)
+  - [x] "새 프로젝트 시작" 링크 → Survey
+  - [x] project_id 조회 실패 시 에러 처리
+  - [x] status가 generated가 아닌 경우 리다이렉트
+  - [x] E-001: 전체 happy path 테스트
+  - [x] E-002: URL 복사 테스트
+  - [x] E-003: 새 프로젝트 시작 테스트
+  - [x] E-008: 조회 실패 → error 테스트
+  - [x] E-009: 다운로드 네트워크 실패 테스트
+  - [x] E-011: intake_saved 상태 직접 접근 → 리다이렉트 테스트
+  - [x] E-015: 새로고침 시 상태 복원 테스트
+  - [x] V-009~V-010: 시각 테스트
+  - [x] A-011~A-013: 접근성 테스트
 - Result:
+  - `frontend/src/pages/CompletePage.tsx` — UUID 검증, getProject 호출, 상태 관리 (loading/success/error), status !== generated 리다이렉트, fetch 기반 ZIP 다운로드, 클립보드 URL 복사, 새 프로젝트 링크
+  - `frontend/tests/e2e/complete.test.tsx` — E-001, E-002, E-003, E-008, E-009, E-011, E-015 (7 tests)
+  - `frontend/tests/visual/complete-visual.test.tsx` — V-009, V-010 (3 tests)
+  - `frontend/tests/accessibility/complete-a11y.test.tsx` — A-011, A-012, A-013 (3 tests)
+  - `frontend/tests/e2e/navigation.test.tsx` — UUID 형식 project_id 및 API 모킹 업데이트
+  - 테스트: vitest 67 passed (기존 54 + complete 13)
 
 ### T016: 공통 접근성 및 시각 검증
 - Status: Backlog
