@@ -54,8 +54,10 @@ const colors: Record<string, string> = {
   'gray-900': '#111827',
   'red-500': '#EF4444',
   'red-600': '#DC2626',
+  'red-700': '#B91C1C',
   'blue-600': '#2563EB',
   'green-500': '#22C55E',
+  'green-700': '#15803D',
   'red-50': '#FEF2F2',
 };
 
@@ -70,7 +72,7 @@ describe('A-014: Normal text contrast ratio >= 4.5:1', () => {
     ['header text (white on gray-800)', 'white', 'gray-800'],
     ['button text (white on blue-600)', 'white', 'blue-600'],
     ['error text (red-600 on white)', 'red-600', 'white'],
-    ['error text on red bg (red-600 on red-50)', 'red-600', 'red-50'],
+    ['error text on red bg (red-700 on red-50)', 'red-700', 'red-50'],
     ['link text (blue-600 on white)', 'blue-600', 'white'],
     ['hint text (gray-500 on white)', 'gray-500', 'white'],
     ['required asterisk (red-600 on white)', 'red-600', 'white'],
@@ -91,7 +93,7 @@ describe('A-015: Large text contrast ratio >= 3:1', () => {
     ['page heading (gray-900 on white)', 'gray-900', 'white'],
     ['section heading (gray-900 on white)', 'gray-900', 'white'],
     ['header h1 (white on gray-800)', 'white', 'gray-800'],
-    ['success icon (green-500 on white)', 'green-500', 'white'],
+    ['success icon (green-700 on white)', 'green-700', 'white'],
     ['error icon (red-500 on white)', 'red-500', 'white'],
   ];
 
