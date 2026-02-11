@@ -7,8 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.adapters.persistence.project_repository import SqlAlchemyProjectRepository
 from src.application.usecases.get_project import GetProject
 from src.config.database import get_session
-from src.domain.exceptions import ProjectNotFound
-
 router = APIRouter()
 
 
@@ -22,15 +20,9 @@ async def get_project(project_id: str, session: AsyncSession = Depends(get_sessi
             content={"error": "INVALID_PROJECT_ID", "message": "project_id must be a valid UUID"},
         )
 
-    try:
-        project_repo = SqlAlchemyProjectRepository(session)
-        use_case = GetProject(project_repo)
-        project = await use_case.execute(pid)
-    except ProjectNotFound:
-        return JSONResponse(
-            status_code=404,
-            content={"error": "PROJECT_NOT_FOUND", "message": f"Project not found: {project_id}"},
-        )
+    project_repo = SqlAlchemyProjectRepository(session)
+    use_case = GetProject(project_repo)
+    project = await use_case.execute(pid)
 
     return JSONResponse(
         status_code=200,

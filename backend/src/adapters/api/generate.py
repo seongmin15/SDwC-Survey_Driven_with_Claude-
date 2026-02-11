@@ -10,7 +10,7 @@ from src.application.services.zip_packager import ZipPackager
 from src.application.usecases.generate_documents import GenerateDocuments
 from src.config.database import get_session
 from src.config.settings import get_settings
-from src.domain.exceptions import AlreadyGenerated, ProjectNotFound
+from src.domain.exceptions import DomainException
 
 router = APIRouter()
 
@@ -47,22 +47,12 @@ async def generate(request: Request, session: AsyncSession = Depends(get_session
         use_case = GenerateDocuments(project_repo, event_repo, zip_packager)
         project = await use_case.execute(project_id)
         await session.commit()
-    except ProjectNotFound:
-        return JSONResponse(
-            status_code=404,
-            content={"error": "PROJECT_NOT_FOUND", "message": f"Project not found: {body['project_id']}"},
-        )
-    except AlreadyGenerated:
-        return JSONResponse(
-            status_code=409,
-            content={"error": "ALREADY_GENERATED", "message": f"Project already generated: {body['project_id']}"},
-        )
+    except DomainException:
+        await session.rollback()
+        raise
     except Exception:
         await session.rollback()
-        return JSONResponse(
-            status_code=500,
-            content={"error": "INTERNAL_ERROR", "message": "Failed to generate documents"},
-        )
+        raise
 
     return JSONResponse(
         status_code=200,

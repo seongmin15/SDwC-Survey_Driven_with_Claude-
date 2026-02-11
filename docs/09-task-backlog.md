@@ -224,17 +224,23 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 124 passed (unit 67 + contract 40 + integration 17: C-015~C-018)
 
 ### T010: 공통 에러 핸들링 및 응답 형식 통합
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: 전역 예외 핸들러 및 공통 응답 형식(success/error) 통합.
 - Acceptance Criteria:
-  - [ ] FastAPI exception handler로 도메인 예외 → HTTP 상태 매핑
-  - [ ] C-019: 에러 응답 형식 `{ "error", "message" }` 통합 테스트
-  - [ ] C-020: 성공 응답 형식 `{ "data" }` 통합 테스트
-  - [ ] S-006: 스택 트레이스 미노출 테스트
-  - [ ] S-007: DB 연결 정보 미노출 테스트
-  - [ ] S-008: 서버 정보 미노출 테스트
+  - [x] FastAPI exception handler로 도메인 예외 → HTTP 상태 매핑
+  - [x] C-019: 에러 응답 형식 `{ "error", "message" }` 통합 테스트
+  - [x] C-020: 성공 응답 형식 `{ "data" }` 통합 테스트
+  - [x] S-006: 스택 트레이스 미노출 테스트
+  - [x] S-007: DB 연결 정보 미노출 테스트
+  - [x] S-008: 서버 정보 미노출 테스트
 - Result:
+  - `backend/src/adapters/api/exception_handlers.py` — 전역 예외 핸들러 (DomainException→HTTP 매핑, 제네릭→500)
+  - `backend/src/config/app.py` — 예외 미들웨어 등록, debug=False
+  - `backend/src/adapters/api/generate.py` — 인라인 도메인 예외 처리 제거, 전역 핸들러 위임
+  - `backend/src/adapters/api/projects.py` — 인라인 도메인 예외 처리 제거
+  - `backend/src/adapters/api/download.py` — 인라인 도메인 예외 처리 제거
+  - 테스트: pytest 142 passed (unit 67 + contract 58 + integration 17: C-019, C-020, S-006, S-007, S-008)
 
 ### T011: 보안 검증 구현
 - Status: Backlog
