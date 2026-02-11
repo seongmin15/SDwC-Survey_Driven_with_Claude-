@@ -77,7 +77,8 @@ describe('V-008: error state — error message + retry button', () => {
 
     await waitFor(() => {
       // Error message should be visible
-      expect(screen.getByText(/오류|에러|error|실패/i)).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+      expect(screen.getByText(/오류가 발생했습니다/)).toBeInTheDocument();
     });
 
     // Retry button should be visible and styled

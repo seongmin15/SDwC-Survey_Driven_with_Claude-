@@ -26,18 +26,17 @@ describe('E-007: Generate API 500 → error + retry', () => {
     mockPostGenerate.mockRejectedValue(new Error('HTTP error! status: 500'));
 
     render(
-      <MemoryRouter initialEntries={['/generate/valid-uuid-123']}>
+      <MemoryRouter initialEntries={['/generate/a1b2c3d4-e5f6-7890-abcd-ef1234567890']}>
         <App />
       </MemoryRouter>,
     );
 
-    // Should show error message
+    // Should show error message and retry button
     await waitFor(() => {
-      expect(screen.getByText(/오류|에러|error|실패|failed/i)).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+      expect(screen.getByText(/오류가 발생했습니다/)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /재시도|retry/i })).toBeInTheDocument();
     });
-
-    // Should show retry button
-    expect(screen.getByRole('button', { name: /재시도|retry/i })).toBeInTheDocument();
   });
 
   it('retries generation when retry button is clicked', async () => {
@@ -45,16 +44,16 @@ describe('E-007: Generate API 500 → error + retry', () => {
       .mockRejectedValueOnce(new Error('HTTP error! status: 500'))
       .mockResolvedValueOnce({
         data: {
-          project_id: 'valid-uuid-123',
+          project_id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
           status: 'generated',
-          download_url: '/projects/valid-uuid-123/download',
+          download_url: '/projects/a1b2c3d4-e5f6-7890-abcd-ef1234567890/download',
           generated_at: '2026-01-01T00:00:00Z',
         },
       });
 
     const user = userEvent.setup();
     render(
-      <MemoryRouter initialEntries={['/generate/valid-uuid-123']}>
+      <MemoryRouter initialEntries={['/generate/a1b2c3d4-e5f6-7890-abcd-ef1234567890']}>
         <App />
       </MemoryRouter>,
     );
