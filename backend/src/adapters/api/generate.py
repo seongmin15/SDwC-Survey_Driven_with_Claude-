@@ -6,8 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.adapters.persistence.event_repository import SqlAlchemyEventRepository
 from src.adapters.persistence.project_repository import SqlAlchemyProjectRepository
+from src.application.services.zip_packager import ZipPackager
 from src.application.usecases.generate_documents import GenerateDocuments
 from src.config.database import get_session
+from src.config.settings import get_settings
 from src.domain.exceptions import AlreadyGenerated, ProjectNotFound
 
 router = APIRouter()
@@ -40,7 +42,9 @@ async def generate(request: Request, session: AsyncSession = Depends(get_session
     try:
         project_repo = SqlAlchemyProjectRepository(session)
         event_repo = SqlAlchemyEventRepository(session)
-        use_case = GenerateDocuments(project_repo, event_repo)
+        settings = get_settings()
+        zip_packager = ZipPackager(settings.OUTPUT_DIR)
+        use_case = GenerateDocuments(project_repo, event_repo, zip_packager)
         project = await use_case.execute(project_id)
         await session.commit()
     except ProjectNotFound:
