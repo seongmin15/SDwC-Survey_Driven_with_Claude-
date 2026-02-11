@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from src.adapters.api.generate import router as generate_router
 from src.adapters.api.health import router as health_router
 from src.adapters.api.intakes import router as intakes_router
+from src.adapters.api.projects import router as projects_router
 from src.config.database import dispose_engine, init_engine
 from src.config.settings import get_settings
 
@@ -23,4 +24,5 @@ def create_app() -> FastAPI:
     app.include_router(health_router)
     app.include_router(intakes_router)
     app.include_router(generate_router)
+    app.include_router(projects_router)
     return app
