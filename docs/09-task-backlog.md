@@ -15,7 +15,7 @@
 
 ## Status Flow
 
-Backlog → Ready → In Progress → Review → Done
+Backlog → Ready → In Progress → Done
 
 ## Task Format
 
