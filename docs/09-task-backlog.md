@@ -284,21 +284,30 @@ Backlog → Ready → In Progress → Done
   - 테스트: vitest 22 passed (health 2 + navigation 5 + layout 9 + api-client 6: E-012, V-011, V-012)
 
 ### T013: Web UI — Survey 페이지 구현
-- Status: Backlog
+- Status: Done
 - Service: web_ui
 - Description: intake_schema.yaml 기반 동적 설문 폼 페이지 구현.
 - Acceptance Criteria:
-  - [ ] 동적 폼 렌더링 (intake_schema.yaml 구조 기반)
-  - [ ] 클라이언트측 필수 필드 검증
-  - [ ] POST /intakes 호출 및 상태 관리 (idle/loading/success/error)
-  - [ ] 성공 시 Generate 페이지로 자동 이동
-  - [ ] E-004: 필수 필드 비움 → 검증 에러 테스트
-  - [ ] E-005: 잘못된 형식 → 에러 메시지 테스트
-  - [ ] E-006: API 타임아웃 → error 상태 테스트
-  - [ ] V-001~V-003: 반응형 레이아웃 테스트
-  - [ ] V-004~V-006: 상태별 시각 테스트
-  - [ ] A-001~A-007: 접근성 테스트
+  - [x] 동적 폼 렌더링 (intake_schema.yaml 구조 기반)
+  - [x] 클라이언트측 필수 필드 검증
+  - [x] POST /intakes 호출 및 상태 관리 (idle/loading/success/error)
+  - [x] 성공 시 Generate 페이지로 자동 이동
+  - [x] E-004: 필수 필드 비움 → 검증 에러 테스트
+  - [x] E-005: 잘못된 형식 → 에러 메시지 테스트
+  - [x] E-006: API 타임아웃 → error 상태 테스트
+  - [x] V-001~V-003: 반응형 레이아웃 테스트
+  - [x] V-004~V-006: 상태별 시각 테스트
+  - [x] A-001~A-007: 접근성 테스트
 - Result:
+  - `frontend/src/components/DynamicForm.tsx` — 스키마 기반 동적 폼 렌더러 (조건부 섹션/필드, 검증, 포커스 관리)
+  - `frontend/src/components/fields/` — TextField, TextareaField, SelectField, MultiSelectField, ListField, NumberField, BooleanField
+  - `frontend/src/utils/conditions.ts` — 조건 평가기 (==, !=, contains, is not empty, AND)
+  - `frontend/src/utils/form-data.ts` — 점 표기법 → 중첩 객체 변환
+  - `frontend/src/pages/SurveyPage.tsx` — DynamicForm + API 연동 + 네비게이션
+  - `frontend/src/data/intake-schema.json` — YAML→JSON 변환 번들
+  - `frontend/scripts/convert-schema.ts` — 스키마 변환 스크립트
+  - 의존성 추가: js-yaml, @types/js-yaml
+  - 테스트: vitest 39 passed (기존 22 + survey 17: E-004~E-006, V-001~V-006, A-001~A-007)
 
 ### T014: Web UI — Generate 페이지 구현
 - Status: Backlog
