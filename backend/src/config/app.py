@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from src.adapters.api.download import router as download_router
 from src.adapters.api.generate import router as generate_router
 from src.adapters.api.health import router as health_router
 from src.adapters.api.intakes import router as intakes_router
@@ -25,4 +26,5 @@ def create_app() -> FastAPI:
     app.include_router(intakes_router)
     app.include_router(generate_router)
     app.include_router(projects_router)
+    app.include_router(download_router)
     return app
