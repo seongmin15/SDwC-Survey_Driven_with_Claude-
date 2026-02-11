@@ -110,16 +110,19 @@ Backlog → Ready → In Progress → Review → Done
   - 테스트: pytest 19 passed (unit 13 + contract 4 + integration 2)
 
 ### T004: Repository Adapter — SQLAlchemy 구현
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: Domain 포트의 SQLAlchemy 구현체 작성. projects, events CRUD.
 - Acceptance Criteria:
-  - [ ] ProjectRepository SQLAlchemy 구현 (create, get_by_id, update_status)
-  - [ ] EventRepository SQLAlchemy 구현 (create, list_by_project_id)
-  - [ ] I-003: 설문 저장 후 projects 테이블 레코드 존재 테스트
-  - [ ] I-004: 설문 저장 후 events 테이블 이벤트 존재 테스트
-  - [ ] I-005: intake_data JSONB 정확 저장 테스트
+  - [x] ProjectRepository SQLAlchemy 구현 (create, get_by_id, update_status)
+  - [x] EventRepository SQLAlchemy 구현 (create, list_by_project_id)
+  - [x] I-003: 설문 저장 후 projects 테이블 레코드 존재 테스트
+  - [x] I-004: 설문 저장 후 events 테이블 이벤트 존재 테스트
+  - [x] I-005: intake_data JSONB 정확 저장 테스트
 - Result:
+  - `backend/src/adapters/persistence/project_repository.py` — SqlAlchemyProjectRepository (create, get_by_id, update_status)
+  - `backend/src/adapters/persistence/event_repository.py` — SqlAlchemyEventRepository (create, list_by_project_id)
+  - 테스트: pytest 27 passed (unit 13 + contract 4 + integration 10: I-001~I-005)
 
 ### T005: POST /intakes 엔드포인트 구현
 - Status: Backlog
