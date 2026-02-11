@@ -52,7 +52,7 @@
 
 ### Status Flow
 
-Backlog → Ready → In Progress → Review → Done
+Backlog → Ready → In Progress → Done
 
 ### Post-Task Completion (per task)
 
