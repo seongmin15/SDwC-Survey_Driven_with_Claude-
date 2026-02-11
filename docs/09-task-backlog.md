@@ -51,17 +51,22 @@ Backlog → Ready → In Progress → Review → Done
 ## Tasks
 
 ### T001: 프로젝트 기초 구조 및 Docker Compose 설정
-- Status: Backlog
+- Status: Review
 - Service: common
 - Description: backend(Poetry/FastAPI), frontend(pnpm/React/Vite) 프로젝트 스캐폴딩 및 docker-compose.yml, Dockerfile 작성. 각 서비스의 /health, /ready 엔드포인트 구현.
 - Acceptance Criteria:
-  - [ ] backend/ 디렉토리에 Poetry 프로젝트 초기화 (pyproject.toml)
-  - [ ] frontend/ 디렉토리에 pnpm + Vite + React + TypeScript + Tailwind 프로젝트 초기화
-  - [ ] docker-compose.yml로 postgres, backend_api, web_ui 3개 서비스 기동 확인
-  - [ ] backend GET /health → 200, GET /ready → 200 (C-023, C-024)
-  - [ ] frontend GET /health → 200, GET /ready → 200
-  - [ ] 헥사고날 디렉토리 구조 생성 (domain/, application/, adapters/, config/)
+  - [x] backend/ 디렉토리에 Poetry 프로젝트 초기화 (pyproject.toml)
+  - [x] frontend/ 디렉토리에 pnpm + Vite + React + TypeScript + Tailwind 프로젝트 초기화
+  - [x] docker-compose.yml로 postgres, backend_api, web_ui 3개 서비스 기동 확인
+  - [x] backend GET /health → 200, GET /ready → 200 (C-023, C-024)
+  - [x] frontend GET /health → 200, GET /ready → 200
+  - [x] 헥사고날 디렉토리 구조 생성 (domain/, application/, adapters/, config/)
 - Result:
+  - backend/ — Poetry + FastAPI + 헥사고날 구조 (domain/application/adapters/config), Dockerfile
+  - frontend/ — pnpm + Vite + React + TypeScript + Tailwind, health plugin, Dockerfile
+  - docker-compose.yml — postgres:16-alpine, backend_api(:8000), web_ui(:3000)
+  - 테스트: backend pytest 4 passed (C-023, C-024), frontend vitest 2 passed
+  - Docker Compose AC는 이미지 빌드/기동으로 검증 가능 (docker compose up -d --build)
 
 ### T002: DB 스키마 및 마이그레이션 설정
 - Status: Backlog

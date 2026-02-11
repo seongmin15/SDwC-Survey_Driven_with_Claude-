@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "sdwc-backend"
+version = "0.1.0"
+description = "SDwC Backend API"
+authors = []
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115"
+uvicorn = {extras = ["standard"], version = "^0.34"}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+anyio = {extras = ["trio"], version = "^4.0"}
+httpx = "^0.28"
+pytest-anyio = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
