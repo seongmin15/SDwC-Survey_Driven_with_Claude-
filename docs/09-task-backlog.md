@@ -146,9 +146,9 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 40 passed (unit 13 + contract 16 + integration 11: C-001~C-006, I-011)
 
 ### T006: POST /generate 엔드포인트 — Template Matching & Rendering
-- Status: Backlog
+- Status: In Progress
 - Service: backend_api
-- Description: 문서 생성 트리거 API. intake_data 기반 템플릿 매칭 및 Jinja2 렌더링 로직 구현.
+- Description: 문서 생성 트리거 API. intake_data 기반 Handlebars-like 커스텀 템플릿 엔진 구현 (매칭, 변수 치환, 조건/반복 블록, CLAUDE.md 생성).
 - Acceptance Criteria:
   - [ ] GenerateDocuments Use Case 구현
   - [ ] Template Engine 서비스 구현 (intake_data → 템플릿 매칭 → Jinja2 렌더링)
