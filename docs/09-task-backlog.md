@@ -190,17 +190,21 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 109 passed (unit 67 + contract 26 + integration 16: I-006~I-009, I-012)
 
 ### T008: GET /projects/:id 엔드포인트 구현
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: 프로젝트 메타 조회 API 구현.
 - Acceptance Criteria:
-  - [ ] GetProject Use Case 구현
-  - [ ] GET /projects/:id FastAPI 라우터 구현
-  - [ ] C-012: 존재하는 project_id → 200 테스트
-  - [ ] C-013: 미존재 project_id → 404 테스트
-  - [ ] C-014: UUID 아닌 project_id → 422 테스트
-  - [ ] I-010: 조회 결과 DB 데이터 일치 테스트
+  - [x] GetProject Use Case 구현
+  - [x] GET /projects/:id FastAPI 라우터 구현
+  - [x] C-012: 존재하는 project_id → 200 테스트
+  - [x] C-013: 미존재 project_id → 404 테스트
+  - [x] C-014: UUID 아닌 project_id → 422 테스트
+  - [x] I-010: 조회 결과 DB 데이터 일치 테스트
 - Result:
+  - `backend/src/application/usecases/get_project.py` — GetProject use case
+  - `backend/src/adapters/api/projects.py` — GET /projects/{project_id} 라우터
+  - `backend/src/config/app.py` — projects_router 등록
+  - 테스트: pytest 116 passed (unit 67 + contract 32 + integration 17: C-012~C-014, I-010)
 
 ### T009: GET /projects/:id/download 엔드포인트 구현
 - Status: Backlog
