@@ -2,9 +2,15 @@
 Contract tests for POST /intakes.
 Verification IDs: C-001, C-002, C-003, C-004, C-005, C-006
 """
+import uuid
+from datetime import datetime, timezone
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
 from httpx import ASGITransport, AsyncClient
-from unittest.mock import AsyncMock, patch
+
+from src.config.database import get_session
+from src.domain.entities.project import Project
 
 VALID_INTAKE_DATA = {
     "project": {"name": "test-app", "description": "A test", "target_users": "devs", "core_value": "testing"},
@@ -14,20 +20,47 @@ VALID_INTAKE_DATA = {
     "backend": {"language": "python", "framework": "fastapi"},
 }
 
+FAKE_PROJECT = Project(
+    id=uuid.uuid4(),
+    project_name="test-app",
+    status="intake_saved",
+    intake_data=VALID_INTAKE_DATA,
+    zip_path=None,
+    created_at=datetime.now(timezone.utc),
+    generated_at=None,
+)
+
 
 @pytest.fixture
-def app():
-    """Fresh app for each test (no DB mocking needed — use case is mocked)."""
+def mock_session():
+    session = AsyncMock()
+    session.commit = AsyncMock()
+    session.rollback = AsyncMock()
+    return session
+
+
+@pytest.fixture
+def app(mock_session):
+    """App with mocked DB session for contract tests."""
     from src.config.app import create_app
-    return create_app()
+
+    app = create_app()
+    app.dependency_overrides[get_session] = lambda: mock_session
+    yield app
+    app.dependency_overrides.clear()
 
 
 @pytest.mark.anyio
-async def test_valid_intake_returns_201(app):
+async def test_valid_intake_returns_201(app, mock_session):
     """C-001: 유효한 intake_data → 201 Created, project_id 반환"""
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as client:
-        response = await client.post("/intakes", json={"intake_data": VALID_INTAKE_DATA})
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(
+            "src.adapters.api.intakes.CreateIntake.execute",
+            AsyncMock(return_value=FAKE_PROJECT),
+        )
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.post("/intakes", json={"intake_data": VALID_INTAKE_DATA})
     assert response.status_code == 201
     body = response.json()
     assert "data" in body
