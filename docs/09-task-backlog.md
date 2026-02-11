@@ -69,7 +69,7 @@ Backlog → Ready → In Progress → Review → Done
   - Docker Compose AC는 이미지 빌드/기동으로 검증 가능 (docker compose up -d --build)
 
 ### T002: DB 스키마 및 마이그레이션 설정
-- Status: Review
+- Status: Done
 - Service: backend_api
 - Description: PostgreSQL에 projects, events 테이블 생성. Alembic 마이그레이션 설정. 연결 풀 및 AsyncSession 구성.
 - Acceptance Criteria:
@@ -91,18 +91,23 @@ Backlog → Ready → In Progress → Review → Done
   - 이슈 해결: Windows psycopg3 ProactorEventLoop 비호환 → SelectorEventLoop 정책 적용, 통합 테스트 asyncio 전용
 
 ### T003: Domain 레이어 — 엔티티 및 포트 정의
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: 헥사고날 아키텍처 Domain 레이어 구현. Project, Event 엔티티와 Repository 포트(인터페이스) 정의.
 - Acceptance Criteria:
-  - [ ] Project 엔티티 (id, project_name, status, intake_data, zip_path, created_at, generated_at)
-  - [ ] Event 엔티티 (id, project_id, event_type, payload, created_at)
-  - [ ] ProjectRepository 포트 (인터페이스) 정의
-  - [ ] EventRepository 포트 (인터페이스) 정의
-  - [ ] 도메인 예외 정의 (ProjectNotFound, AlreadyGenerated, NotYetGenerated 등)
-  - [ ] C-021: Domain 레이어가 FastAPI/SQLAlchemy import 없음 테스트
-  - [ ] C-022: 의존성 방향 검증 테스트
+  - [x] Project 엔티티 (id, project_name, status, intake_data, zip_path, created_at, generated_at)
+  - [x] Event 엔티티 (id, project_id, event_type, payload, created_at)
+  - [x] ProjectRepository 포트 (인터페이스) 정의
+  - [x] EventRepository 포트 (인터페이스) 정의
+  - [x] 도메인 예외 정의 (ProjectNotFound, AlreadyGenerated, NotYetGenerated 등)
+  - [x] C-021: Domain 레이어가 FastAPI/SQLAlchemy import 없음 테스트
+  - [x] C-022: 의존성 방향 검증 테스트
 - Result:
+  - `backend/src/domain/entities/project.py` — Project dataclass (7 fields, 21-data-design.md 일치)
+  - `backend/src/domain/entities/event.py` — Event dataclass (5 fields)
+  - `backend/src/domain/ports/repositories.py` — ProjectRepository (create, get_by_id, update_status), EventRepository (create, list_by_project_id) ABC
+  - `backend/src/domain/exceptions.py` — DomainException, ProjectNotFound, AlreadyGenerated, NotYetGenerated
+  - 테스트: pytest 19 passed (unit 13 + contract 4 + integration 2)
 
 ### T004: Repository Adapter — SQLAlchemy 구현
 - Status: Backlog
