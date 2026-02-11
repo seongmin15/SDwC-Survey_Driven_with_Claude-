@@ -55,7 +55,7 @@ describe('E-001: Happy path — Complete page displays project info + download',
 
     // Should show download button
     expect(
-      screen.getByRole('link', { name: /다운로드|download/i }),
+      screen.getByRole('button', { name: /다운로드|download/i }),
     ).toBeInTheDocument();
   });
 });
@@ -63,16 +63,19 @@ describe('E-001: Happy path — Complete page displays project info + download',
 describe('E-002: URL copy button', () => {
   beforeEach(() => {
     mockGetProject.mockReset();
-    Object.assign(navigator, {
-      clipboard: { writeText: vi.fn().mockResolvedValue(undefined) },
-    });
   });
 
   it('copies download URL to clipboard when copy button is clicked', async () => {
     mockGetProject.mockResolvedValue(mockProjectData);
     mockGetDownloadUrl.mockReturnValue(`/projects/${VALID_UUID}/download`);
 
-    const user = userEvent.setup();
+    const writeTextSpy = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextSpy },
+      writable: true,
+      configurable: true,
+    });
+
     render(
       <MemoryRouter initialEntries={[`/complete/${VALID_UUID}`]}>
         <App />
@@ -84,9 +87,13 @@ describe('E-002: URL copy button', () => {
     });
 
     const copyButton = screen.getByRole('button', { name: /복사|copy/i });
-    await user.click(copyButton);
+    // Use fireEvent to avoid userEvent clipboard interception
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.click(copyButton);
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(writeTextSpy).toHaveBeenCalled();
+    });
   });
 });
 

@@ -75,7 +75,7 @@ describe('A-012: Download button Tab + Enter activation', () => {
       expect(screen.getByText(/Test Project/)).toBeInTheDocument();
     });
 
-    const downloadLink = screen.getByRole('link', {
+    const downloadButton = screen.getByRole('button', {
       name: /다운로드|download/i,
     });
 
@@ -84,7 +84,7 @@ describe('A-012: Download button Tab + Enter activation', () => {
     // Keep tabbing until download link is focused (max 10 tabs)
     let found = false;
     for (let i = 0; i < 10; i++) {
-      if (document.activeElement === downloadLink) {
+      if (document.activeElement === downloadButton) {
         found = true;
         break;
       }
@@ -92,7 +92,7 @@ describe('A-012: Download button Tab + Enter activation', () => {
     }
 
     expect(found).toBe(true);
-    expect(downloadLink).toHaveAttribute('href');
+    // Button is focusable and accessible via Tab
   });
 });
 

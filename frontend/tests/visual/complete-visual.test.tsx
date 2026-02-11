@@ -49,7 +49,7 @@ describe('V-009: success state — URL display + download button + copy button',
     });
 
     // Download button should be present and visible
-    const downloadBtn = screen.getByRole('link', { name: /다운로드|download/i });
+    const downloadBtn = screen.getByRole('button', { name: /다운로드|download/i });
     expect(downloadBtn).toBeVisible();
 
     // Copy button should be present and visible
@@ -101,7 +101,7 @@ describe('V-010: Responsive layout — Desktop/Tablet/Mobile', () => {
 
     // All buttons should be rendered and accessible
     expect(
-      screen.getByRole('link', { name: /다운로드|download/i }),
+      screen.getByRole('button', { name: /다운로드|download/i }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /복사|copy/i }),
