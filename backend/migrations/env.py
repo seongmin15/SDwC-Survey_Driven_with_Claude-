@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -13,6 +14,11 @@ from src.adapters.persistence.models import Base
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+# Override with env var if available (for Docker)
+db_url = os.environ.get("POSTGRESQL_URL")
+if db_url:
+    config.set_main_option("sqlalchemy.url", db_url)
 
 target_metadata = Base.metadata
 

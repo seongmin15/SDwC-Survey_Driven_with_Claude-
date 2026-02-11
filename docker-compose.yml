@@ -22,7 +22,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - POSTGRESQL_URL=postgresql://sdwc:sdwc@postgres:5432/sdwc
+      - POSTGRESQL_URL=postgresql+psycopg://sdwc:sdwc@postgres:5432/sdwc
       - HOST=0.0.0.0
       - PORT=8000
     depends_on:

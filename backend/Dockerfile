@@ -14,4 +14,4 @@ RUN poetry install --only main
 
 EXPOSE 8000
 
-CMD ["uvicorn", "src.config.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn src.config.app:create_app --factory --host 0.0.0.0 --port 8000"]
