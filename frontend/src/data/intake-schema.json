@@ -1,0 +1,2859 @@
+{
+  "schema_version": "2026-02-11",
+  "sections": [
+    {
+      "id": "project_basics",
+      "label": "프로젝트 기본 정보",
+      "order": 1,
+      "fields": [
+        {
+          "id": "project.name",
+          "type": "text",
+          "label": "프로젝트 이름",
+          "required": true,
+          "placeholder": "예: my-awesome-project"
+        },
+        {
+          "id": "project.description",
+          "type": "textarea",
+          "label": "어떤 문제를 해결하려고 합니까?",
+          "required": true,
+          "placeholder": "예: 매번 프로젝트 문서를 수동으로 작성하는데 시간이 너무 오래 걸립니다"
+        },
+        {
+          "id": "project.target_users",
+          "type": "textarea",
+          "label": "대상 사용자는 누구입니까?",
+          "required": true,
+          "placeholder": "예: Claude와 함께 소프트웨어를 개발하려는 1인 개발자"
+        },
+        {
+          "id": "project.core_value",
+          "type": "textarea",
+          "label": "이 프로젝트의 핵심 가치는 무엇입니까?",
+          "required": true,
+          "placeholder": "예: 설문만 작성하면 AI 협업에 최적화된 프로젝트 문서를 즉시 받을 수 있다"
+        }
+      ]
+    },
+    {
+      "id": "mvp_scope",
+      "label": "MVP 범위",
+      "order": 2,
+      "fields": [
+        {
+          "id": "scope.in_scope",
+          "type": "list",
+          "label": "이번 MVP에 포함할 기능",
+          "required": true,
+          "item_type": "text",
+          "min_items": 1,
+          "placeholder": "예: 설문 입력 (intake_schema.yaml 기반 동적 폼)"
+        },
+        {
+          "id": "scope.out_of_scope",
+          "type": "textarea",
+          "label": "이번 MVP에 포함하지 않을 기능",
+          "required": true,
+          "placeholder": "예: 팀 협업, 사용자 인증, Notion 연동"
+        },
+        {
+          "id": "scope.success_criteria",
+          "type": "textarea",
+          "label": "MVP 완료 기준",
+          "required": true,
+          "placeholder": "예: 설문 작성 → 문서 생성 → ZIP 다운로드 플로우가 end-to-end로 동작"
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "label": "아키텍처",
+      "order": 3,
+      "fields": [
+        {
+          "id": "architecture.pattern",
+          "type": "select",
+          "label": "아키텍처 패턴",
+          "required": true,
+          "options": [
+            {
+              "id": "monolith",
+              "label": "Monolith"
+            },
+            {
+              "id": "modular_monolith",
+              "label": "Modular Monolith"
+            },
+            {
+              "id": "monorepo",
+              "label": "Monorepo"
+            },
+            {
+              "id": "microservice",
+              "label": "Microservice"
+            },
+            {
+              "id": "serverless",
+              "label": "Serverless"
+            }
+          ]
+        },
+        {
+          "id": "architecture.pattern_reason",
+          "type": "textarea",
+          "label": "아키텍처 패턴 선택 이유",
+          "required": true,
+          "placeholder": "예: 서비스가 2개뿐이고 MVP 단계라 단일 배포가 효율적"
+        },
+        {
+          "id": "architecture.internal_style",
+          "type": "select",
+          "label": "내부 코드 아키텍처",
+          "required": false,
+          "description": "서비스 내부의 코드 구조 패턴입니다. 시스템 토폴로지(위 패턴)와는 별개로, 코드를 어떻게 조직하는지를 정합니다.",
+          "options": [
+            {
+              "id": "layered",
+              "label": "Layered Architecture",
+              "description": "Controller → Service → Repository 계층 분리. 전통적이고 진입장벽이 낮음."
+            },
+            {
+              "id": "hexagonal",
+              "label": "Hexagonal (Ports & Adapters)",
+              "description": "도메인 중심, 외부 의존성을 포트/어댑터로 격리. 테스트와 기술 교체에 유리."
+            },
+            {
+              "id": "clean",
+              "label": "Clean Architecture",
+              "description": "Use Case 계층을 명시적으로 분리. 헥사고날과 유사하나 계층 규칙이 더 엄격."
+            },
+            {
+              "id": "onion",
+              "label": "Onion Architecture",
+              "description": "동심원 구조. Domain Model이 가장 안쪽, 외부로 갈수록 인프라 의존성."
+            },
+            {
+              "id": "cqrs",
+              "label": "CQRS",
+              "description": "읽기(Query)와 쓰기(Command) 경로 분리. 이벤트 소싱과 자주 조합."
+            },
+            {
+              "id": "vertical_slice",
+              "label": "Vertical Slice",
+              "description": "계층이 아닌 기능(feature) 단위로 코드를 묶음. 각 슬라이스가 독립적."
+            }
+          ]
+        },
+        {
+          "id": "architecture.internal_style_reason",
+          "type": "textarea",
+          "label": "내부 코드 아키텍처 선택 이유",
+          "required": false,
+          "depends_on": "architecture.internal_style",
+          "placeholder": "예: 도메인 로직을 프레임워크와 분리하여 테스트성을 높이기 위해"
+        }
+      ]
+    },
+    {
+      "id": "service_select",
+      "label": "서비스 선택",
+      "order": 4,
+      "condition": "architecture.pattern != microservice",
+      "fields": [
+        {
+          "id": "services",
+          "type": "multi_select",
+          "label": "이 프로젝트에 필요한 서비스를 선택하세요",
+          "required": true,
+          "options": [
+            {
+              "id": "backend_api",
+              "label": "Backend API",
+              "description": "REST 또는 GraphQL API 서버"
+            },
+            {
+              "id": "web_ui",
+              "label": "Web UI",
+              "description": "브라우저 기반 웹 프론트엔드"
+            },
+            {
+              "id": "mobile_app",
+              "label": "Mobile App",
+              "description": "iOS/Android 모바일 앱"
+            },
+            {
+              "id": "worker",
+              "label": "Worker",
+              "description": "백그라운드 잡, 배치 처리"
+            },
+            {
+              "id": "data_pipeline",
+              "label": "Data Pipeline",
+              "description": "ML/데이터 파이프라인"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "service_list",
+      "label": "서비스 목록",
+      "order": 4,
+      "condition": "architecture.pattern == microservice",
+      "type": "repeatable_group",
+      "item_label": "서비스",
+      "min_items": 2,
+      "max_items": 20,
+      "fields": [
+        {
+          "id": "service.name",
+          "type": "text",
+          "label": "서비스 이름",
+          "required": true,
+          "placeholder": "예: user-api, payment-api, web-app"
+        },
+        {
+          "id": "service.type",
+          "type": "select",
+          "label": "서비스 유형",
+          "required": true,
+          "options": [
+            {
+              "id": "backend_api",
+              "label": "Backend API"
+            },
+            {
+              "id": "web_ui",
+              "label": "Web UI"
+            },
+            {
+              "id": "mobile_app",
+              "label": "Mobile App"
+            },
+            {
+              "id": "worker",
+              "label": "Worker"
+            },
+            {
+              "id": "data_pipeline",
+              "label": "Data Pipeline"
+            }
+          ]
+        },
+        {
+          "id": "service.language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "options": [
+            {
+              "id": "python",
+              "label": "Python"
+            },
+            {
+              "id": "typescript",
+              "label": "TypeScript"
+            },
+            {
+              "id": "java",
+              "label": "Java"
+            },
+            {
+              "id": "go",
+              "label": "Go"
+            },
+            {
+              "id": "kotlin",
+              "label": "Kotlin"
+            },
+            {
+              "id": "rust",
+              "label": "Rust"
+            }
+          ]
+        },
+        {
+          "id": "service.framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "depends_on": "service.language",
+          "options_by_parent": {
+            "python": [
+              {
+                "id": "fastapi",
+                "label": "FastAPI"
+              },
+              {
+                "id": "django",
+                "label": "Django"
+              },
+              {
+                "id": "flask",
+                "label": "Flask"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "express",
+                "label": "Express"
+              },
+              {
+                "id": "nestjs",
+                "label": "NestJS"
+              },
+              {
+                "id": "hono",
+                "label": "Hono"
+              }
+            ],
+            "java": [
+              {
+                "id": "spring_boot",
+                "label": "Spring Boot"
+              }
+            ],
+            "go": [
+              {
+                "id": "gin",
+                "label": "Gin"
+              },
+              {
+                "id": "echo",
+                "label": "Echo"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "ktor",
+                "label": "Ktor"
+              },
+              {
+                "id": "spring_boot_kt",
+                "label": "Spring Boot (Kotlin)"
+              }
+            ],
+            "rust": [
+              {
+                "id": "actix",
+                "label": "Actix Web"
+              },
+              {
+                "id": "axum",
+                "label": "Axum"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.framework_reason",
+          "type": "textarea",
+          "label": "프레임워크 선택 이유",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "placeholder": "예: 비동기 지원이 좋고 생태계가 풍부해서"
+        },
+        {
+          "id": "service.build_tool",
+          "type": "select",
+          "label": "빌드 도구",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "depends_on": "service.language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "npm",
+                "label": "npm"
+              },
+              {
+                "id": "yarn",
+                "label": "Yarn"
+              },
+              {
+                "id": "pnpm",
+                "label": "pnpm"
+              }
+            ],
+            "python": [
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              },
+              {
+                "id": "uv",
+                "label": "uv"
+              },
+              {
+                "id": "pip",
+                "label": "pip"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "condition": "service.type == backend_api"
+        },
+        {
+          "id": "service.databases",
+          "type": "repeatable_group",
+          "label": "데이터베이스",
+          "item_label": "데이터베이스",
+          "min_items": 0,
+          "max_items": 5,
+          "condition": "service.type == backend_api",
+          "fields": [
+            {
+              "id": "db.engine",
+              "type": "select",
+              "label": "엔진",
+              "required": true,
+              "options": [
+                {
+                  "id": "postgresql",
+                  "label": "PostgreSQL"
+                },
+                {
+                  "id": "mysql",
+                  "label": "MySQL"
+                },
+                {
+                  "id": "mongodb",
+                  "label": "MongoDB"
+                },
+                {
+                  "id": "sqlite",
+                  "label": "SQLite"
+                },
+                {
+                  "id": "redis",
+                  "label": "Redis"
+                }
+              ]
+            },
+            {
+              "id": "db.role",
+              "type": "select",
+              "label": "역할",
+              "required": true,
+              "options": [
+                {
+                  "id": "primary",
+                  "label": "Primary (주 데이터 저장)"
+                },
+                {
+                  "id": "content_store",
+                  "label": "Content Store (비정형 콘텐츠)"
+                },
+                {
+                  "id": "cache",
+                  "label": "Cache (캐시)"
+                },
+                {
+                  "id": "search",
+                  "label": "Search (검색 인덱스)"
+                },
+                {
+                  "id": "queue",
+                  "label": "Queue (메시지 큐)"
+                },
+                {
+                  "id": "replica",
+                  "label": "Replica (읽기 분산)"
+                }
+              ]
+            },
+            {
+              "id": "db.reason",
+              "type": "textarea",
+              "label": "선택 이유",
+              "required": true,
+              "placeholder": "예: 정합성이 중요한 관계형 데이터를 관리하기 위해"
+            }
+          ]
+        },
+        {
+          "id": "service.api_style",
+          "type": "select",
+          "label": "API 스타일",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "options": [
+            {
+              "id": "rest",
+              "label": "REST"
+            },
+            {
+              "id": "graphql",
+              "label": "GraphQL"
+            },
+            {
+              "id": "grpc",
+              "label": "gRPC"
+            }
+          ]
+        },
+        {
+          "id": "service.auth",
+          "type": "select",
+          "label": "인증 방식",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "options": [
+            {
+              "id": "none",
+              "label": "없음"
+            },
+            {
+              "id": "jwt",
+              "label": "JWT"
+            },
+            {
+              "id": "oauth",
+              "label": "OAuth 2.0"
+            },
+            {
+              "id": "session",
+              "label": "Session"
+            }
+          ]
+        },
+        {
+          "id": "service.deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "options": [
+            {
+              "id": "docker",
+              "label": "Docker (self-hosted)"
+            },
+            {
+              "id": "cloud_run",
+              "label": "Google Cloud Run"
+            },
+            {
+              "id": "aws_lambda",
+              "label": "AWS Lambda"
+            },
+            {
+              "id": "fly_io",
+              "label": "Fly.io"
+            },
+            {
+              "id": "railway",
+              "label": "Railway"
+            }
+          ]
+        },
+        {
+          "id": "service.main_endpoints",
+          "type": "textarea",
+          "label": "주요 엔드포인트",
+          "required": true,
+          "condition": "service.type == backend_api",
+          "placeholder": "예: POST /users - 사용자 생성"
+        },
+        {
+          "id": "service.main_entities",
+          "type": "textarea",
+          "label": "주요 테이블/엔티티",
+          "required": true,
+          "condition": "service.type == backend_api AND service.databases is not empty",
+          "placeholder": "예: users - 사용자 정보"
+        },
+        {
+          "id": "service.web_language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "condition": "service.type == web_ui",
+          "options": [
+            {
+              "id": "typescript",
+              "label": "TypeScript"
+            },
+            {
+              "id": "javascript",
+              "label": "JavaScript"
+            }
+          ]
+        },
+        {
+          "id": "service.web_framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "condition": "service.type == web_ui",
+          "depends_on": "service.web_language",
+          "options_by_parent": {
+            "typescript": [
+              {
+                "id": "react",
+                "label": "React"
+              },
+              {
+                "id": "nextjs",
+                "label": "Next.js"
+              },
+              {
+                "id": "vue",
+                "label": "Vue"
+              },
+              {
+                "id": "svelte",
+                "label": "Svelte"
+              },
+              {
+                "id": "angular",
+                "label": "Angular"
+              }
+            ],
+            "javascript": [
+              {
+                "id": "react",
+                "label": "React"
+              },
+              {
+                "id": "vue",
+                "label": "Vue"
+              },
+              {
+                "id": "svelte",
+                "label": "Svelte"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.css_strategy",
+          "type": "select",
+          "label": "CSS 방식",
+          "required": false,
+          "condition": "service.type == web_ui",
+          "options": [
+            {
+              "id": "tailwind",
+              "label": "Tailwind CSS"
+            },
+            {
+              "id": "css_modules",
+              "label": "CSS Modules"
+            },
+            {
+              "id": "styled_components",
+              "label": "Styled Components"
+            },
+            {
+              "id": "vanilla",
+              "label": "Vanilla CSS"
+            }
+          ]
+        },
+        {
+          "id": "service.web_build_tool",
+          "type": "select",
+          "label": "빌드/패키지 도구",
+          "required": true,
+          "condition": "service.type == web_ui",
+          "options": [
+            {
+              "id": "npm",
+              "label": "npm"
+            },
+            {
+              "id": "yarn",
+              "label": "Yarn"
+            },
+            {
+              "id": "pnpm",
+              "label": "pnpm"
+            }
+          ]
+        },
+        {
+          "id": "service.web_build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "condition": "service.type == web_ui"
+        },
+        {
+          "id": "service.web_deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "condition": "service.type == web_ui",
+          "options": [
+            {
+              "id": "same_server",
+              "label": "백엔드와 같은 서버 (Docker)"
+            },
+            {
+              "id": "vercel",
+              "label": "Vercel"
+            },
+            {
+              "id": "netlify",
+              "label": "Netlify"
+            },
+            {
+              "id": "cloudflare_pages",
+              "label": "Cloudflare Pages"
+            },
+            {
+              "id": "s3_cloudfront",
+              "label": "AWS S3 + CloudFront"
+            }
+          ]
+        },
+        {
+          "id": "service.main_pages",
+          "type": "textarea",
+          "label": "주요 페이지 목록",
+          "required": true,
+          "condition": "service.type == web_ui",
+          "placeholder": "예:\nHome - 메인 페이지\nDashboard - 대시보드\n"
+        },
+        {
+          "id": "service.page_flow",
+          "type": "textarea",
+          "label": "페이지 간 플로우",
+          "required": true,
+          "condition": "service.type == web_ui",
+          "placeholder": "예: Home → Dashboard → Settings"
+        },
+        {
+          "id": "service.connected_api",
+          "type": "text",
+          "label": "연동할 API 서비스 이름",
+          "required": false,
+          "condition": "service.type == web_ui",
+          "placeholder": "예: user-api"
+        },
+        {
+          "id": "service.worker_language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "condition": "service.type == worker",
+          "options": [
+            {
+              "id": "python",
+              "label": "Python"
+            },
+            {
+              "id": "typescript",
+              "label": "TypeScript"
+            },
+            {
+              "id": "java",
+              "label": "Java"
+            },
+            {
+              "id": "go",
+              "label": "Go"
+            },
+            {
+              "id": "kotlin",
+              "label": "Kotlin"
+            }
+          ]
+        },
+        {
+          "id": "service.worker_deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "condition": "service.type == worker",
+          "options": [
+            {
+              "id": "docker",
+              "label": "Docker (self-hosted)"
+            },
+            {
+              "id": "cloud_run_jobs",
+              "label": "Cloud Run Jobs"
+            },
+            {
+              "id": "aws_lambda",
+              "label": "AWS Lambda"
+            }
+          ]
+        },
+        {
+          "id": "service.worker_queue_system",
+          "type": "select",
+          "label": "큐/메시징 시스템",
+          "required": false,
+          "condition": "service.type == worker",
+          "options": [
+            {
+              "id": "kafka",
+              "label": "Apache Kafka"
+            },
+            {
+              "id": "rabbitmq",
+              "label": "RabbitMQ"
+            },
+            {
+              "id": "redis_queue",
+              "label": "Redis (Bull/BullMQ)"
+            },
+            {
+              "id": "sqs",
+              "label": "AWS SQS"
+            },
+            {
+              "id": "none",
+              "label": "없음 (스케줄 기반)"
+            }
+          ]
+        },
+        {
+          "id": "service.worker_build_tool",
+          "type": "select",
+          "label": "빌드 도구",
+          "required": false,
+          "condition": "service.type == worker",
+          "depends_on": "service.worker_language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "npm",
+                "label": "npm"
+              },
+              {
+                "id": "yarn",
+                "label": "Yarn"
+              },
+              {
+                "id": "pnpm",
+                "label": "pnpm"
+              }
+            ],
+            "python": [
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              },
+              {
+                "id": "uv",
+                "label": "uv"
+              },
+              {
+                "id": "pip",
+                "label": "pip"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.worker_build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "condition": "service.type == worker"
+        },
+        {
+          "id": "service.worker_description",
+          "type": "textarea",
+          "label": "주요 작업 설명",
+          "required": true,
+          "condition": "service.type == worker",
+          "placeholder": "예: 매시간 외부 API에서 데이터를 수집하여 DB에 저장"
+        },
+        {
+          "id": "service.mobile_platform",
+          "type": "select",
+          "label": "플랫폼",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "options": [
+            {
+              "id": "ios",
+              "label": "iOS"
+            },
+            {
+              "id": "android",
+              "label": "Android"
+            },
+            {
+              "id": "cross_platform",
+              "label": "Cross-platform"
+            }
+          ]
+        },
+        {
+          "id": "service.mobile_language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "depends_on": "service.mobile_platform",
+          "options_by_parent": {
+            "ios": [
+              {
+                "id": "swift",
+                "label": "Swift"
+              }
+            ],
+            "android": [
+              {
+                "id": "kotlin",
+                "label": "Kotlin"
+              },
+              {
+                "id": "java",
+                "label": "Java"
+              }
+            ],
+            "cross_platform": [
+              {
+                "id": "dart",
+                "label": "Dart"
+              },
+              {
+                "id": "typescript",
+                "label": "TypeScript"
+              },
+              {
+                "id": "javascript",
+                "label": "JavaScript"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.mobile_framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "depends_on": "service.mobile_platform",
+          "options_by_parent": {
+            "ios": [
+              {
+                "id": "swiftui",
+                "label": "SwiftUI"
+              },
+              {
+                "id": "uikit",
+                "label": "UIKit"
+              }
+            ],
+            "android": [
+              {
+                "id": "jetpack_compose",
+                "label": "Jetpack Compose"
+              },
+              {
+                "id": "android_views",
+                "label": "Android Views (XML)"
+              }
+            ],
+            "cross_platform": [
+              {
+                "id": "flutter",
+                "label": "Flutter"
+              },
+              {
+                "id": "react_native",
+                "label": "React Native"
+              },
+              {
+                "id": "expo",
+                "label": "Expo"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.mobile_build_tool",
+          "type": "select",
+          "label": "빌드/의존성 도구",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "depends_on": "service.mobile_platform",
+          "options_by_parent": {
+            "ios": [
+              {
+                "id": "spm",
+                "label": "Swift Package Manager"
+              },
+              {
+                "id": "cocoapods",
+                "label": "CocoaPods"
+              }
+            ],
+            "android": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              }
+            ],
+            "cross_platform": [
+              {
+                "id": "npm",
+                "label": "npm"
+              },
+              {
+                "id": "yarn",
+                "label": "Yarn"
+              },
+              {
+                "id": "pnpm",
+                "label": "pnpm"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.mobile_build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "condition": "service.type == mobile_app"
+        },
+        {
+          "id": "service.mobile_deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "options": [
+            {
+              "id": "app_store",
+              "label": "App Store (iOS)"
+            },
+            {
+              "id": "play_store",
+              "label": "Play Store (Android)"
+            },
+            {
+              "id": "both_stores",
+              "label": "App Store + Play Store"
+            },
+            {
+              "id": "testflight",
+              "label": "TestFlight (테스트 전용)"
+            },
+            {
+              "id": "firebase_distribution",
+              "label": "Firebase App Distribution"
+            }
+          ]
+        },
+        {
+          "id": "service.mobile_main_screens",
+          "type": "textarea",
+          "label": "주요 화면 목록",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "placeholder": "예: Home - 메인 화면, Profile - 프로필"
+        },
+        {
+          "id": "service.mobile_navigation_flow",
+          "type": "textarea",
+          "label": "화면 간 플로우",
+          "required": true,
+          "condition": "service.type == mobile_app",
+          "placeholder": "예: Splash → Login → Home → Detail"
+        },
+        {
+          "id": "service.mobile_connected_api",
+          "type": "text",
+          "label": "연동할 API 서비스 이름",
+          "required": false,
+          "condition": "service.type == mobile_app",
+          "placeholder": "예: user-api"
+        },
+        {
+          "id": "service.pipeline_language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "condition": "service.type == data_pipeline",
+          "options": [
+            {
+              "id": "python",
+              "label": "Python"
+            },
+            {
+              "id": "scala",
+              "label": "Scala"
+            },
+            {
+              "id": "java",
+              "label": "Java"
+            },
+            {
+              "id": "sql",
+              "label": "SQL (dbt 등)"
+            }
+          ]
+        },
+        {
+          "id": "service.pipeline_framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "condition": "service.type == data_pipeline",
+          "depends_on": "service.pipeline_language",
+          "options_by_parent": {
+            "python": [
+              {
+                "id": "airflow",
+                "label": "Apache Airflow"
+              },
+              {
+                "id": "prefect",
+                "label": "Prefect"
+              },
+              {
+                "id": "dagster",
+                "label": "Dagster"
+              },
+              {
+                "id": "spark_python",
+                "label": "Apache Spark (PySpark)"
+              },
+              {
+                "id": "pandas",
+                "label": "Pandas (단순 처리)"
+              }
+            ],
+            "scala": [
+              {
+                "id": "spark_scala",
+                "label": "Apache Spark"
+              },
+              {
+                "id": "flink",
+                "label": "Apache Flink"
+              }
+            ],
+            "java": [
+              {
+                "id": "spark_java",
+                "label": "Apache Spark"
+              },
+              {
+                "id": "beam",
+                "label": "Apache Beam"
+              }
+            ],
+            "sql": [
+              {
+                "id": "dbt",
+                "label": "dbt"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.pipeline_build_tool",
+          "type": "select",
+          "label": "빌드/의존성 도구",
+          "required": true,
+          "condition": "service.type == data_pipeline",
+          "depends_on": "service.pipeline_language",
+          "options_by_parent": {
+            "python": [
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              },
+              {
+                "id": "uv",
+                "label": "uv"
+              },
+              {
+                "id": "pip",
+                "label": "pip"
+              }
+            ],
+            "scala": [
+              {
+                "id": "sbt",
+                "label": "sbt"
+              },
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "java": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "sql": [
+              {
+                "id": "pip",
+                "label": "pip (dbt 설치용)"
+              },
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              }
+            ]
+          }
+        },
+        {
+          "id": "service.pipeline_build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "condition": "service.type == data_pipeline"
+        },
+        {
+          "id": "service.pipeline_deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "condition": "service.type == data_pipeline",
+          "options": [
+            {
+              "id": "docker",
+              "label": "Docker (self-hosted)"
+            },
+            {
+              "id": "cloud_composer",
+              "label": "Cloud Composer (GCP)"
+            },
+            {
+              "id": "mwaa",
+              "label": "MWAA (AWS Airflow)"
+            },
+            {
+              "id": "emr",
+              "label": "AWS EMR"
+            },
+            {
+              "id": "databricks",
+              "label": "Databricks"
+            },
+            {
+              "id": "local",
+              "label": "로컬 실행"
+            }
+          ]
+        },
+        {
+          "id": "service.pipeline_description",
+          "type": "textarea",
+          "label": "파이프라인 설명",
+          "required": true,
+          "condition": "service.type == data_pipeline",
+          "placeholder": "예: 외부 API에서 매일 데이터를 수집하여 정제 후 적재"
+        }
+      ]
+    },
+    {
+      "id": "backend_config",
+      "label": "Backend API 설정",
+      "order": 10,
+      "condition": "architecture.pattern != microservice AND services contains backend_api",
+      "fields": [
+        {
+          "id": "backend.language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "options": [
+            {
+              "id": "python",
+              "label": "Python"
+            },
+            {
+              "id": "typescript",
+              "label": "TypeScript"
+            },
+            {
+              "id": "java",
+              "label": "Java"
+            },
+            {
+              "id": "go",
+              "label": "Go"
+            },
+            {
+              "id": "kotlin",
+              "label": "Kotlin"
+            },
+            {
+              "id": "rust",
+              "label": "Rust"
+            }
+          ]
+        },
+        {
+          "id": "backend.framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "depends_on": "backend.language",
+          "options_by_parent": {
+            "python": [
+              {
+                "id": "fastapi",
+                "label": "FastAPI"
+              },
+              {
+                "id": "django",
+                "label": "Django"
+              },
+              {
+                "id": "flask",
+                "label": "Flask"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "express",
+                "label": "Express"
+              },
+              {
+                "id": "nestjs",
+                "label": "NestJS"
+              },
+              {
+                "id": "hono",
+                "label": "Hono"
+              }
+            ],
+            "java": [
+              {
+                "id": "spring_boot",
+                "label": "Spring Boot"
+              }
+            ],
+            "go": [
+              {
+                "id": "gin",
+                "label": "Gin"
+              },
+              {
+                "id": "echo",
+                "label": "Echo"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "ktor",
+                "label": "Ktor"
+              },
+              {
+                "id": "spring_boot_kt",
+                "label": "Spring Boot (Kotlin)"
+              }
+            ],
+            "rust": [
+              {
+                "id": "actix",
+                "label": "Actix Web"
+              },
+              {
+                "id": "axum",
+                "label": "Axum"
+              }
+            ]
+          }
+        },
+        {
+          "id": "backend.framework_reason",
+          "type": "textarea",
+          "label": "프레임워크 선택 이유",
+          "required": true,
+          "placeholder": "예: 비동기 지원이 좋고 Python 생태계를 활용할 수 있어서"
+        },
+        {
+          "id": "backend.build_tool",
+          "type": "select",
+          "label": "빌드 도구",
+          "required": true,
+          "depends_on": "backend.language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "npm",
+                "label": "npm"
+              },
+              {
+                "id": "yarn",
+                "label": "Yarn"
+              },
+              {
+                "id": "pnpm",
+                "label": "pnpm"
+              }
+            ],
+            "python": [
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              },
+              {
+                "id": "uv",
+                "label": "uv"
+              },
+              {
+                "id": "pip",
+                "label": "pip"
+              }
+            ]
+          }
+        },
+        {
+          "id": "backend.build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "placeholder": "예: 의존성 관리가 직관적이고 빌드 속도가 빨라서"
+        },
+        {
+          "id": "backend.databases",
+          "type": "repeatable_group",
+          "label": "데이터베이스",
+          "item_label": "데이터베이스",
+          "min_items": 0,
+          "max_items": 5,
+          "fields": [
+            {
+              "id": "db.engine",
+              "type": "select",
+              "label": "엔진",
+              "required": true,
+              "options": [
+                {
+                  "id": "postgresql",
+                  "label": "PostgreSQL"
+                },
+                {
+                  "id": "mysql",
+                  "label": "MySQL"
+                },
+                {
+                  "id": "mongodb",
+                  "label": "MongoDB"
+                },
+                {
+                  "id": "sqlite",
+                  "label": "SQLite"
+                },
+                {
+                  "id": "redis",
+                  "label": "Redis"
+                }
+              ]
+            },
+            {
+              "id": "db.role",
+              "type": "select",
+              "label": "역할",
+              "required": true,
+              "options": [
+                {
+                  "id": "primary",
+                  "label": "Primary (주 데이터 저장)"
+                },
+                {
+                  "id": "content_store",
+                  "label": "Content Store (비정형 콘텐츠)"
+                },
+                {
+                  "id": "cache",
+                  "label": "Cache (캐시)"
+                },
+                {
+                  "id": "search",
+                  "label": "Search (검색 인덱스)"
+                },
+                {
+                  "id": "queue",
+                  "label": "Queue (메시지 큐)"
+                },
+                {
+                  "id": "replica",
+                  "label": "Replica (읽기 분산)"
+                }
+              ]
+            },
+            {
+              "id": "db.reason",
+              "type": "textarea",
+              "label": "선택 이유",
+              "required": true,
+              "placeholder": "예: 정합성이 중요한 관계형 데이터를 관리하기 위해"
+            }
+          ]
+        },
+        {
+          "id": "backend.api_style",
+          "type": "select",
+          "label": "API 스타일",
+          "required": true,
+          "options": [
+            {
+              "id": "rest",
+              "label": "REST"
+            },
+            {
+              "id": "graphql",
+              "label": "GraphQL"
+            }
+          ]
+        },
+        {
+          "id": "backend.auth",
+          "type": "select",
+          "label": "인증 방식",
+          "required": true,
+          "options": [
+            {
+              "id": "none",
+              "label": "없음 (MVP)"
+            },
+            {
+              "id": "jwt",
+              "label": "JWT"
+            },
+            {
+              "id": "oauth",
+              "label": "OAuth 2.0"
+            },
+            {
+              "id": "session",
+              "label": "Session"
+            }
+          ]
+        },
+        {
+          "id": "backend.deploy_target",
+          "type": "select",
+          "label": "백엔드 배포 대상",
+          "required": true,
+          "options": [
+            {
+              "id": "docker",
+              "label": "Docker (self-hosted)"
+            },
+            {
+              "id": "cloud_run",
+              "label": "Google Cloud Run"
+            },
+            {
+              "id": "aws_lambda",
+              "label": "AWS Lambda"
+            },
+            {
+              "id": "fly_io",
+              "label": "Fly.io"
+            },
+            {
+              "id": "railway",
+              "label": "Railway"
+            }
+          ]
+        },
+        {
+          "id": "backend.main_endpoints",
+          "type": "textarea",
+          "label": "주요 엔드포인트",
+          "required": true,
+          "placeholder": "예:\nPOST /intakes - 설문 데이터 저장\nPOST /generate - 문서 생성\nGET /export.zip - ZIP 다운로드\n"
+        },
+        {
+          "id": "backend.main_entities",
+          "type": "textarea",
+          "label": "주요 테이블/엔티티",
+          "required": true,
+          "condition": "backend.databases is not empty",
+          "placeholder": "예:\nintakes - 설문 입력 데이터\nevents - 생성 이벤트 이력\n"
+        }
+      ]
+    },
+    {
+      "id": "worker_config",
+      "label": "Worker 설정",
+      "order": 15,
+      "condition": "architecture.pattern != microservice AND services contains worker",
+      "fields": [
+        {
+          "id": "worker.language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "options": [
+            {
+              "id": "python",
+              "label": "Python"
+            },
+            {
+              "id": "typescript",
+              "label": "TypeScript"
+            },
+            {
+              "id": "java",
+              "label": "Java"
+            },
+            {
+              "id": "go",
+              "label": "Go"
+            },
+            {
+              "id": "kotlin",
+              "label": "Kotlin"
+            }
+          ]
+        },
+        {
+          "id": "worker.framework",
+          "type": "select",
+          "label": "프레임워크 (선택)",
+          "required": false,
+          "depends_on": "worker.language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "spring_boot",
+                "label": "Spring Boot"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "spring_boot_kt",
+                "label": "Spring Boot (Kotlin)"
+              }
+            ],
+            "python": [
+              {
+                "id": "celery",
+                "label": "Celery"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "bullmq",
+                "label": "BullMQ"
+              }
+            ],
+            "go": [
+              {
+                "id": "none",
+                "label": "없음 (stdlib)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "worker.queue_system",
+          "type": "select",
+          "label": "큐/메시징 시스템",
+          "required": false,
+          "options": [
+            {
+              "id": "kafka",
+              "label": "Apache Kafka"
+            },
+            {
+              "id": "rabbitmq",
+              "label": "RabbitMQ"
+            },
+            {
+              "id": "redis_queue",
+              "label": "Redis (Bull/BullMQ)"
+            },
+            {
+              "id": "sqs",
+              "label": "AWS SQS"
+            },
+            {
+              "id": "none",
+              "label": "없음 (스케줄 기반)"
+            }
+          ]
+        },
+        {
+          "id": "worker.build_tool",
+          "type": "select",
+          "label": "빌드 도구",
+          "required": false,
+          "depends_on": "worker.language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "npm",
+                "label": "npm"
+              },
+              {
+                "id": "yarn",
+                "label": "Yarn"
+              },
+              {
+                "id": "pnpm",
+                "label": "pnpm"
+              }
+            ],
+            "python": [
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              },
+              {
+                "id": "uv",
+                "label": "uv"
+              },
+              {
+                "id": "pip",
+                "label": "pip"
+              }
+            ]
+          }
+        },
+        {
+          "id": "worker.build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false
+        },
+        {
+          "id": "worker.deploy_target",
+          "type": "select",
+          "label": "Worker 배포 대상",
+          "required": true,
+          "options": [
+            {
+              "id": "docker",
+              "label": "Docker (self-hosted)"
+            },
+            {
+              "id": "cloud_run_jobs",
+              "label": "Cloud Run Jobs"
+            },
+            {
+              "id": "aws_lambda",
+              "label": "AWS Lambda"
+            }
+          ]
+        },
+        {
+          "id": "worker.description",
+          "type": "textarea",
+          "label": "주요 작업 설명",
+          "required": true,
+          "placeholder": "예: 매시간 외부 API에서 데이터를 수집하여 DB에 저장"
+        }
+      ]
+    },
+    {
+      "id": "web_config",
+      "label": "Web UI 설정",
+      "order": 20,
+      "condition": "architecture.pattern != microservice AND services contains web_ui",
+      "fields": [
+        {
+          "id": "web.language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "options": [
+            {
+              "id": "typescript",
+              "label": "TypeScript"
+            },
+            {
+              "id": "javascript",
+              "label": "JavaScript"
+            }
+          ]
+        },
+        {
+          "id": "web.framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "depends_on": "web.language",
+          "options_by_parent": {
+            "typescript": [
+              {
+                "id": "react",
+                "label": "React"
+              },
+              {
+                "id": "nextjs",
+                "label": "Next.js"
+              },
+              {
+                "id": "vue",
+                "label": "Vue"
+              },
+              {
+                "id": "svelte",
+                "label": "Svelte"
+              },
+              {
+                "id": "angular",
+                "label": "Angular"
+              }
+            ],
+            "javascript": [
+              {
+                "id": "react",
+                "label": "React"
+              },
+              {
+                "id": "vue",
+                "label": "Vue"
+              },
+              {
+                "id": "svelte",
+                "label": "Svelte"
+              }
+            ]
+          }
+        },
+        {
+          "id": "web.framework_reason",
+          "type": "textarea",
+          "label": "프레임워크 선택 이유",
+          "required": true,
+          "placeholder": "예: 팀 경험이 많고 생태계가 풍부해서"
+        },
+        {
+          "id": "web.css_strategy",
+          "type": "select",
+          "label": "CSS 방식",
+          "required": false,
+          "options": [
+            {
+              "id": "tailwind",
+              "label": "Tailwind CSS"
+            },
+            {
+              "id": "css_modules",
+              "label": "CSS Modules"
+            },
+            {
+              "id": "styled_components",
+              "label": "Styled Components"
+            },
+            {
+              "id": "vanilla",
+              "label": "Vanilla CSS"
+            }
+          ]
+        },
+        {
+          "id": "web.build_tool",
+          "type": "select",
+          "label": "빌드/패키지 도구",
+          "required": true,
+          "options": [
+            {
+              "id": "npm",
+              "label": "npm"
+            },
+            {
+              "id": "yarn",
+              "label": "Yarn"
+            },
+            {
+              "id": "pnpm",
+              "label": "pnpm"
+            }
+          ]
+        },
+        {
+          "id": "web.build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false,
+          "placeholder": "예: 모노레포 환경에서 workspace 지원이 좋아서"
+        },
+        {
+          "id": "web.main_pages",
+          "type": "textarea",
+          "label": "주요 페이지 목록",
+          "required": true,
+          "placeholder": "예:\nSurvey - 설문 입력 페이지\nGenerate - 문서 생성 페이지\nDownload - ZIP 다운로드 페이지\n"
+        },
+        {
+          "id": "web.page_flow",
+          "type": "textarea",
+          "label": "페이지 간 플로우",
+          "required": true,
+          "placeholder": "예: Survey → Generate → Download"
+        },
+        {
+          "id": "web.deploy_target",
+          "type": "select",
+          "label": "프론트엔드 배포 대상",
+          "required": true,
+          "options": [
+            {
+              "id": "same_server",
+              "label": "백엔드와 같은 서버 (Docker)"
+            },
+            {
+              "id": "vercel",
+              "label": "Vercel"
+            },
+            {
+              "id": "netlify",
+              "label": "Netlify"
+            },
+            {
+              "id": "cloudflare_pages",
+              "label": "Cloudflare Pages"
+            },
+            {
+              "id": "s3_cloudfront",
+              "label": "AWS S3 + CloudFront"
+            }
+          ]
+        },
+        {
+          "id": "web.connected_api",
+          "type": "select",
+          "label": "연동할 API 서비스",
+          "required": false,
+          "options_from": "services",
+          "condition": "services contains backend_api"
+        }
+      ]
+    },
+    {
+      "id": "mobile_config",
+      "label": "Mobile App 설정",
+      "order": 25,
+      "condition": "architecture.pattern != microservice AND services contains mobile_app",
+      "fields": [
+        {
+          "id": "mobile.platform",
+          "type": "select",
+          "label": "플랫폼",
+          "required": true,
+          "options": [
+            {
+              "id": "ios",
+              "label": "iOS"
+            },
+            {
+              "id": "android",
+              "label": "Android"
+            },
+            {
+              "id": "cross_platform",
+              "label": "Cross-platform"
+            }
+          ]
+        },
+        {
+          "id": "mobile.language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "depends_on": "mobile.platform",
+          "options_by_parent": {
+            "ios": [
+              {
+                "id": "swift",
+                "label": "Swift"
+              }
+            ],
+            "android": [
+              {
+                "id": "kotlin",
+                "label": "Kotlin"
+              },
+              {
+                "id": "java",
+                "label": "Java"
+              }
+            ],
+            "cross_platform": [
+              {
+                "id": "dart",
+                "label": "Dart"
+              },
+              {
+                "id": "typescript",
+                "label": "TypeScript"
+              },
+              {
+                "id": "javascript",
+                "label": "JavaScript"
+              }
+            ]
+          }
+        },
+        {
+          "id": "mobile.framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "depends_on": "mobile.platform",
+          "options_by_parent": {
+            "ios": [
+              {
+                "id": "swiftui",
+                "label": "SwiftUI"
+              },
+              {
+                "id": "uikit",
+                "label": "UIKit"
+              }
+            ],
+            "android": [
+              {
+                "id": "jetpack_compose",
+                "label": "Jetpack Compose"
+              },
+              {
+                "id": "android_views",
+                "label": "Android Views (XML)"
+              }
+            ],
+            "cross_platform": [
+              {
+                "id": "flutter",
+                "label": "Flutter"
+              },
+              {
+                "id": "react_native",
+                "label": "React Native"
+              },
+              {
+                "id": "expo",
+                "label": "Expo"
+              }
+            ]
+          }
+        },
+        {
+          "id": "mobile.framework_reason",
+          "type": "textarea",
+          "label": "프레임워크 선택 이유",
+          "required": true,
+          "placeholder": "예: 크로스플랫폼으로 iOS/Android 동시 개발이 필요해서"
+        },
+        {
+          "id": "mobile.build_tool",
+          "type": "select",
+          "label": "빌드/의존성 도구",
+          "required": true,
+          "depends_on": "mobile.platform",
+          "options_by_parent": {
+            "ios": [
+              {
+                "id": "spm",
+                "label": "Swift Package Manager"
+              },
+              {
+                "id": "cocoapods",
+                "label": "CocoaPods"
+              }
+            ],
+            "android": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              }
+            ],
+            "cross_platform": [
+              {
+                "id": "npm",
+                "label": "npm"
+              },
+              {
+                "id": "yarn",
+                "label": "Yarn"
+              },
+              {
+                "id": "pnpm",
+                "label": "pnpm"
+              }
+            ]
+          }
+        },
+        {
+          "id": "mobile.build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false
+        },
+        {
+          "id": "mobile.deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "options": [
+            {
+              "id": "app_store",
+              "label": "App Store (iOS)"
+            },
+            {
+              "id": "play_store",
+              "label": "Play Store (Android)"
+            },
+            {
+              "id": "both_stores",
+              "label": "App Store + Play Store"
+            },
+            {
+              "id": "testflight",
+              "label": "TestFlight (테스트 전용)"
+            },
+            {
+              "id": "firebase_distribution",
+              "label": "Firebase App Distribution"
+            }
+          ]
+        },
+        {
+          "id": "mobile.main_screens",
+          "type": "textarea",
+          "label": "주요 화면 목록",
+          "required": true,
+          "placeholder": "예:\nHome - 메인 화면\nProfile - 프로필 화면\nSettings - 설정 화면\n"
+        },
+        {
+          "id": "mobile.navigation_flow",
+          "type": "textarea",
+          "label": "화면 간 플로우",
+          "required": true,
+          "placeholder": "예: Splash → Login → Home → Detail"
+        },
+        {
+          "id": "mobile.connected_api",
+          "type": "select",
+          "label": "연동할 API 서비스",
+          "required": false,
+          "options_from": "services",
+          "condition": "services contains backend_api"
+        }
+      ]
+    },
+    {
+      "id": "pipeline_config",
+      "label": "Data Pipeline 설정",
+      "order": 30,
+      "condition": "architecture.pattern != microservice AND services contains data_pipeline",
+      "fields": [
+        {
+          "id": "pipeline.language",
+          "type": "select",
+          "label": "언어",
+          "required": true,
+          "options": [
+            {
+              "id": "python",
+              "label": "Python"
+            },
+            {
+              "id": "scala",
+              "label": "Scala"
+            },
+            {
+              "id": "java",
+              "label": "Java"
+            },
+            {
+              "id": "sql",
+              "label": "SQL (dbt 등)"
+            }
+          ]
+        },
+        {
+          "id": "pipeline.framework",
+          "type": "select",
+          "label": "프레임워크",
+          "required": true,
+          "depends_on": "pipeline.language",
+          "options_by_parent": {
+            "python": [
+              {
+                "id": "airflow",
+                "label": "Apache Airflow"
+              },
+              {
+                "id": "prefect",
+                "label": "Prefect"
+              },
+              {
+                "id": "dagster",
+                "label": "Dagster"
+              },
+              {
+                "id": "luigi",
+                "label": "Luigi"
+              },
+              {
+                "id": "spark_python",
+                "label": "Apache Spark (PySpark)"
+              },
+              {
+                "id": "pandas",
+                "label": "Pandas (단순 처리)"
+              }
+            ],
+            "scala": [
+              {
+                "id": "spark_scala",
+                "label": "Apache Spark"
+              },
+              {
+                "id": "flink",
+                "label": "Apache Flink"
+              }
+            ],
+            "java": [
+              {
+                "id": "spark_java",
+                "label": "Apache Spark"
+              },
+              {
+                "id": "beam",
+                "label": "Apache Beam"
+              }
+            ],
+            "sql": [
+              {
+                "id": "dbt",
+                "label": "dbt"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pipeline.framework_reason",
+          "type": "textarea",
+          "label": "프레임워크 선택 이유",
+          "required": true,
+          "placeholder": "예: 팀에서 Airflow 경험이 풍부하고 DAG 관리가 편해서"
+        },
+        {
+          "id": "pipeline.build_tool",
+          "type": "select",
+          "label": "빌드/의존성 도구",
+          "required": true,
+          "depends_on": "pipeline.language",
+          "options_by_parent": {
+            "python": [
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              },
+              {
+                "id": "uv",
+                "label": "uv"
+              },
+              {
+                "id": "pip",
+                "label": "pip"
+              }
+            ],
+            "scala": [
+              {
+                "id": "sbt",
+                "label": "sbt"
+              },
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "java": [
+              {
+                "id": "gradle",
+                "label": "Gradle"
+              },
+              {
+                "id": "maven",
+                "label": "Maven"
+              }
+            ],
+            "sql": [
+              {
+                "id": "pip",
+                "label": "pip (dbt 설치용)"
+              },
+              {
+                "id": "poetry",
+                "label": "Poetry"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pipeline.build_tool_reason",
+          "type": "textarea",
+          "label": "빌드 도구 선택 이유",
+          "required": false
+        },
+        {
+          "id": "pipeline.deploy_target",
+          "type": "select",
+          "label": "배포 대상",
+          "required": true,
+          "options": [
+            {
+              "id": "docker",
+              "label": "Docker (self-hosted)"
+            },
+            {
+              "id": "cloud_composer",
+              "label": "Cloud Composer (GCP)"
+            },
+            {
+              "id": "mwaa",
+              "label": "MWAA (AWS Airflow)"
+            },
+            {
+              "id": "emr",
+              "label": "AWS EMR"
+            },
+            {
+              "id": "databricks",
+              "label": "Databricks"
+            },
+            {
+              "id": "local",
+              "label": "로컬 실행"
+            }
+          ]
+        },
+        {
+          "id": "pipeline.description",
+          "type": "textarea",
+          "label": "파이프라인 설명",
+          "required": true,
+          "placeholder": "예: 외부 API에서 매일 데이터를 수집하여 정제 후 데이터 웨어하우스에 적재"
+        }
+      ]
+    },
+    {
+      "id": "collaboration",
+      "label": "협업 방식",
+      "order": 80,
+      "fields": [
+        {
+          "id": "collaboration.methodology",
+          "type": "select",
+          "label": "개발 방법론",
+          "required": true,
+          "options": [
+            {
+              "id": "kanban",
+              "label": "Kanban"
+            },
+            {
+              "id": "scrum",
+              "label": "Scrum"
+            }
+          ]
+        },
+        {
+          "id": "collaboration.sprint_length",
+          "type": "select",
+          "label": "스프린트 기간",
+          "required": true,
+          "condition": "collaboration.methodology == scrum",
+          "options": [
+            {
+              "id": "1w",
+              "label": "1주"
+            },
+            {
+              "id": "2w",
+              "label": "2주"
+            }
+          ]
+        },
+        {
+          "id": "collaboration.task_review_minutes",
+          "type": "number",
+          "label": "작업 단위 (분)",
+          "required": true,
+          "placeholder": "예: 30"
+        },
+        {
+          "id": "collaboration.wip_limit",
+          "type": "number",
+          "label": "동시 진행 작업 수 (WIP Limit)",
+          "required": true,
+          "placeholder": "예: 2"
+        },
+        {
+          "id": "collaboration.use_subagent",
+          "type": "boolean",
+          "label": "서비스별 서브 에이전트 사용",
+          "required": true,
+          "description": "서비스별로 독립된 서브 에이전트를 생성하여 태스크를 병렬 실행합니다. MSA 프로젝트에 권장됩니다."
+        },
+        {
+          "id": "collaboration.model_routing",
+          "type": "select",
+          "label": "모델 라우팅",
+          "required": true,
+          "options": [
+            {
+              "id": "opus_only",
+              "label": "Opus only",
+              "description": "모든 작업을 Opus가 수행합니다"
+            },
+            {
+              "id": "opus_sonnet",
+              "label": "Opus + Sonnet",
+              "description": "계획/리뷰는 Opus, 코드 구현은 Sonnet이 수행합니다"
+            }
+          ]
+        },
+        {
+          "id": "collaboration.tdd",
+          "type": "boolean",
+          "label": "TDD (Test-Driven Development)",
+          "required": true,
+          "description": "테스트를 먼저 작성하고, 구현 후 통과를 확인하는 방식으로 개발합니다."
+        }
+      ]
+    },
+    {
+      "id": "git",
+      "label": "Git 전략",
+      "order": 81,
+      "fields": [
+        {
+          "id": "git.branch_strategy",
+          "type": "select",
+          "label": "브랜치 전략",
+          "required": true,
+          "options": [
+            {
+              "id": "master_develop_task",
+              "label": "master / develop / task/*",
+              "description": "master(배포) + develop(통합) + task/*(작업). develop에서 분기, PR로 develop에 머지."
+            },
+            {
+              "id": "main_feature",
+              "label": "main / feature/*",
+              "description": "main(통합+배포) + task/*(작업). main에서 분기, PR로 main에 머지. develop 없음."
+            },
+            {
+              "id": "trunk",
+              "label": "Trunk-based",
+              "description": "main 단일 브랜치. 짧은 수명의 feature 브랜치만 사용."
+            },
+            {
+              "id": "gitflow",
+              "label": "Git Flow",
+              "description": "main + develop + feature + release + hotfix. 복잡한 릴리스 관리용."
+            }
+          ]
+        },
+        {
+          "id": "git.pr_by",
+          "type": "select",
+          "label": "PR 생성 주체",
+          "required": true,
+          "options": [
+            {
+              "id": "user",
+              "label": "사용자가 직접 생성"
+            },
+            {
+              "id": "ai",
+              "label": "AI가 생성 (사용자 승인 후)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deployment",
+      "label": "인프라 / 오케스트레이션",
+      "order": 82,
+      "fields": [
+        {
+          "id": "deployment.initial",
+          "type": "select",
+          "label": "인프라 운영 방식",
+          "required": true,
+          "options": [
+            {
+              "id": "docker_single",
+              "label": "Docker 단일 노드"
+            },
+            {
+              "id": "docker_compose",
+              "label": "Docker Compose"
+            },
+            {
+              "id": "kubernetes",
+              "label": "Kubernetes"
+            },
+            {
+              "id": "serverless",
+              "label": "Serverless"
+            },
+            {
+              "id": "bare_metal",
+              "label": "직접 설치 (Bare Metal)"
+            }
+          ]
+        },
+        {
+          "id": "deployment.initial_reason",
+          "type": "textarea",
+          "label": "배포 방식 선택 이유",
+          "required": true,
+          "placeholder": "예: 초기에는 단일 서버로 충분하고 설정이 간단해서"
+        },
+        {
+          "id": "deployment.future",
+          "type": "multi_select",
+          "label": "향후 배포 확장 계획",
+          "required": false,
+          "options": [
+            {
+              "id": "team_collaboration",
+              "label": "팀 단위 협업"
+            },
+            {
+              "id": "server_deploy",
+              "label": "서버 배포"
+            },
+            {
+              "id": "cloud",
+              "label": "클라우드 (AWS, GCP, Azure)"
+            },
+            {
+              "id": "ci_cd",
+              "label": "CI/CD 파이프라인"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "observability",
+      "label": "Observability",
+      "order": 83,
+      "fields": [
+        {
+          "id": "observability.included_in_mvp",
+          "type": "boolean",
+          "label": "MVP에 모니터링/로깅을 포함합니까?",
+          "required": true
+        },
+        {
+          "id": "observability.logging",
+          "type": "select",
+          "label": "로깅 도구",
+          "required": true,
+          "condition": "observability.included_in_mvp == true",
+          "depends_on": "backend.language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "slf4j_logback",
+                "label": "SLF4J + Logback"
+              },
+              {
+                "id": "log4j2",
+                "label": "Log4j2"
+              },
+              {
+                "id": "default",
+                "label": "프레임워크 기본값"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "slf4j_logback",
+                "label": "SLF4J + Logback"
+              },
+              {
+                "id": "log4j2",
+                "label": "Log4j2"
+              },
+              {
+                "id": "default",
+                "label": "프레임워크 기본값"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "winston",
+                "label": "Winston"
+              },
+              {
+                "id": "pino",
+                "label": "Pino"
+              },
+              {
+                "id": "default",
+                "label": "프레임워크 기본값"
+              }
+            ],
+            "python": [
+              {
+                "id": "python_logging",
+                "label": "Python logging + structlog"
+              },
+              {
+                "id": "default",
+                "label": "프레임워크 기본값"
+              }
+            ],
+            "go": [
+              {
+                "id": "zap",
+                "label": "Zap"
+              },
+              {
+                "id": "default",
+                "label": "프레임워크 기본값"
+              }
+            ],
+            "rust": [
+              {
+                "id": "tracing_rs",
+                "label": "tracing (tokio)"
+              },
+              {
+                "id": "default",
+                "label": "프레임워크 기본값"
+              }
+            ]
+          }
+        },
+        {
+          "id": "observability.metrics",
+          "type": "select",
+          "label": "메트릭 도구",
+          "required": true,
+          "condition": "observability.included_in_mvp == true",
+          "depends_on": "backend.language",
+          "options_by_parent": {
+            "java": [
+              {
+                "id": "actuator_micrometer",
+                "label": "Spring Actuator + Micrometer"
+              },
+              {
+                "id": "opentelemetry",
+                "label": "OpenTelemetry"
+              },
+              {
+                "id": "none",
+                "label": "메트릭 미포함 (로깅만)"
+              }
+            ],
+            "kotlin": [
+              {
+                "id": "actuator_micrometer",
+                "label": "Spring Actuator + Micrometer"
+              },
+              {
+                "id": "opentelemetry",
+                "label": "OpenTelemetry"
+              },
+              {
+                "id": "none",
+                "label": "메트릭 미포함 (로깅만)"
+              }
+            ],
+            "typescript": [
+              {
+                "id": "prometheus_client",
+                "label": "Prometheus Client"
+              },
+              {
+                "id": "opentelemetry",
+                "label": "OpenTelemetry"
+              },
+              {
+                "id": "none",
+                "label": "메트릭 미포함 (로깅만)"
+              }
+            ],
+            "python": [
+              {
+                "id": "prometheus_client",
+                "label": "Prometheus Client"
+              },
+              {
+                "id": "opentelemetry",
+                "label": "OpenTelemetry"
+              },
+              {
+                "id": "none",
+                "label": "메트릭 미포함 (로깅만)"
+              }
+            ],
+            "go": [
+              {
+                "id": "prometheus_client",
+                "label": "Prometheus Client"
+              },
+              {
+                "id": "opentelemetry",
+                "label": "OpenTelemetry"
+              },
+              {
+                "id": "none",
+                "label": "메트릭 미포함 (로깅만)"
+              }
+            ],
+            "rust": [
+              {
+                "id": "prometheus_client",
+                "label": "Prometheus Client"
+              },
+              {
+                "id": "opentelemetry",
+                "label": "OpenTelemetry"
+              },
+              {
+                "id": "none",
+                "label": "메트릭 미포함 (로깅만)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "observability.tracing",
+          "type": "boolean",
+          "label": "분산 트레이싱 포함",
+          "required": false,
+          "condition": "observability.included_in_mvp == true",
+          "description": "요청 흐름 추적을 위한 trace_id 기반 분산 트레이싱을 포함합니다."
+        }
+      ]
+    },
+    {
+      "id": "extensions",
+      "label": "확장 계획",
+      "order": 90,
+      "fields": [
+        {
+          "id": "extensions.notion_enabled",
+          "type": "boolean",
+          "label": "Notion 연동 계획이 있습니까?",
+          "required": false
+        },
+        {
+          "id": "extensions.future_plans",
+          "type": "textarea",
+          "label": "향후 확장 계획",
+          "required": false,
+          "placeholder": "예: 외부 분석 엔진 연동, 문서 자동 생성 플러그인"
+        }
+      ]
+    }
+  ]
+}
