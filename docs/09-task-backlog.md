@@ -146,19 +146,29 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 40 passed (unit 13 + contract 16 + integration 11: C-001~C-006, I-011)
 
 ### T006: POST /generate 엔드포인트 — Template Matching & Rendering
-- Status: In Progress
+- Status: Done
 - Service: backend_api
 - Description: 문서 생성 트리거 API. intake_data 기반 Handlebars-like 커스텀 템플릿 엔진 구현 (매칭, 변수 치환, 조건/반복 블록, CLAUDE.md 생성).
 - Acceptance Criteria:
-  - [ ] GenerateDocuments Use Case 구현
-  - [ ] Template Engine 서비스 구현 (intake_data → 템플릿 매칭 → Jinja2 렌더링)
-  - [ ] CLAUDE.md, docs/*.md, .sdwc/ 구조 파일 생성
-  - [ ] C-007: 유효한 project_id → 200, generated 테스트
-  - [ ] C-008: project_id 누락 → 400 테스트
-  - [ ] C-009: 미존재 project_id → 404 테스트
-  - [ ] C-010: UUID 아닌 project_id → 422 테스트
-  - [ ] C-011: 이미 generated → 409 테스트
+  - [x] GenerateDocuments Use Case 구현
+  - [x] Template Processor 구현 (Handlebars-like: {{#if}}, {{#each}}, {{@adr_number}} 등)
+  - [x] Template Matcher 구현 (generation_rules.md 기반 템플릿 선택)
+  - [x] Document Generator 구현 (매칭 → 렌더링 → CLAUDE.md/docs/skill-templates/intake_data.yaml)
+  - [x] CLAUDE.md, docs/*.md, .sdwc/ 구조 파일 생성
+  - [x] C-007: 유효한 project_id → 200, generated 테스트
+  - [x] C-008: project_id 누락 → 400 테스트
+  - [x] C-009: 미존재 project_id → 404 테스트
+  - [x] C-010: UUID 아닌 project_id → 422 테스트
+  - [x] C-011: 이미 generated → 409 테스트
 - Result:
+  - `backend/src/adapters/api/generate.py` — POST /generate 라우터 (project_id 검증, 도메인 예외 처리)
+  - `backend/src/application/usecases/generate_documents.py` — GenerateDocuments use case (검증 → 생성 → 상태 업데이트)
+  - `backend/src/application/services/template_processor.py` — 커스텀 Handlebars-like 엔진 (tokenizer→AST→evaluator, {{#if}}/{{#each}}/{{@adr_number}} 등)
+  - `backend/src/application/services/template_matcher.py` — generation_rules.md 기반 템플릿 매칭 (common/conditional/per-service/MSA)
+  - `backend/src/application/services/document_generator.py` — 문서 생성 오케스트레이션 (CLAUDE.md, docs/, .sdwc/skill-templates/, intake_data.yaml)
+  - `backend/resources/templates/` — doc-templates, skill-templates, CLAUDE_BASE.md, generation-rules, output-contract, intake-schema
+  - jinja2 → pyyaml 의존성 교체
+  - 테스트: pytest 93 passed (unit 67 + contract 26)
 
 ### T007: POST /generate 엔드포인트 — ZIP 패키징 및 DB 업데이트
 - Status: Backlog
