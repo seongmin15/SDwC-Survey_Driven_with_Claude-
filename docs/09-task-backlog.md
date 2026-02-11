@@ -243,20 +243,24 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 142 passed (unit 67 + contract 58 + integration 17: C-019, C-020, S-006, S-007, S-008)
 
 ### T011: 보안 검증 구현
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: 입력 검증 보안 및 환경 보안 테스트 구현.
 - Acceptance Criteria:
-  - [ ] S-001: SQL injection 문자열 정상 처리 테스트
-  - [ ] S-002: 대용량 payload 거부 테스트
-  - [ ] S-003: 잘못된 JSON 형식 처리 테스트
-  - [ ] S-004: path traversal 거부 테스트
-  - [ ] S-005: 빈 body 처리 테스트
-  - [ ] S-009: 하드코딩 시크릿 미존재 검사
-  - [ ] S-010: Docker 이미지 .env 미포함 검사
-  - [ ] S-011: 로그 시크릿 미포함 테스트
-  - [ ] S-012: .gitignore 검사
+  - [x] S-001: SQL injection 문자열 정상 처리 테스트
+  - [x] S-002: 대용량 payload 거부 테스트
+  - [x] S-003: 잘못된 JSON 형식 처리 테스트
+  - [x] S-004: path traversal 거부 테스트
+  - [x] S-005: 빈 body 처리 테스트
+  - [x] S-009: 하드코딩 시크릿 미존재 검사
+  - [x] S-010: Docker 이미지 .env 미포함 검사
+  - [x] S-011: 로그 시크릿 미포함 테스트
+  - [x] S-012: .gitignore 검사
 - Result:
+  - `backend/tests/security/test_input_validation.py` — S-001~S-005 입력 검증 보안 테스트
+  - `backend/tests/security/test_environment.py` — S-009~S-012 환경 보안 테스트
+  - `backend/.dockerignore` — .env, .env.* 추가
+  - 테스트: pytest 164 passed (unit 67 + contract 58 + security 22 + integration 17)
 
 ### T012: Web UI — 프로젝트 초기화 및 공통 레이아웃
 - Status: Backlog
