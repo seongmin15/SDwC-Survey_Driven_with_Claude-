@@ -310,7 +310,7 @@ Backlog → Ready → In Progress → Done
   - 테스트: vitest 39 passed (기존 22 + survey 17: E-004~E-006, V-001~V-006, A-001~A-007)
 
 ### T014: Web UI — Generate 페이지 구현
-- Status: Backlog
+- Status: In Progress
 - Service: web_ui
 - Description: 문서 생성 트리거 및 진행 상태 표시 페이지 구현.
 - Acceptance Criteria:
