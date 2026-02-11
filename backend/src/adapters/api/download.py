@@ -8,8 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.adapters.persistence.project_repository import SqlAlchemyProjectRepository
 from src.application.usecases.download_project import DownloadProject
 from src.config.database import get_session
-from src.domain.exceptions import NotYetGenerated, ProjectNotFound
-
 router = APIRouter()
 
 
@@ -23,20 +21,9 @@ async def download_project(project_id: str, session: AsyncSession = Depends(get_
             content={"error": "INVALID_PROJECT_ID", "message": "project_id must be a valid UUID"},
         )
 
-    try:
-        project_repo = SqlAlchemyProjectRepository(session)
-        use_case = DownloadProject(project_repo)
-        project = await use_case.execute(pid)
-    except ProjectNotFound:
-        return JSONResponse(
-            status_code=404,
-            content={"error": "PROJECT_NOT_FOUND", "message": f"Project not found: {project_id}"},
-        )
-    except NotYetGenerated:
-        return JSONResponse(
-            status_code=409,
-            content={"error": "NOT_YET_GENERATED", "message": f"Project not yet generated: {project_id}"},
-        )
+    project_repo = SqlAlchemyProjectRepository(session)
+    use_case = DownloadProject(project_repo)
+    project = await use_case.execute(pid)
 
     zip_path = Path(project.zip_path)
     if not zip_path.exists():
