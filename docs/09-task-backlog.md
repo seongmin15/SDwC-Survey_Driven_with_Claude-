@@ -125,21 +125,25 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 27 passed (unit 13 + contract 4 + integration 10: I-001~I-005)
 
 ### T005: POST /intakes 엔드포인트 구현
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: 설문 데이터 저장 API. Use Case + FastAPI Router 구현.
 - Acceptance Criteria:
-  - [ ] CreateIntake Use Case 구현
-  - [ ] POST /intakes FastAPI 라우터 구현
-  - [ ] Pydantic 요청/응답 모델 정의
-  - [ ] C-001: 유효한 intake_data → 201 테스트
-  - [ ] C-002: intake_data 누락 → 400 테스트
-  - [ ] C-003: 스키마 검증 실패 → 400 테스트
-  - [ ] C-004: 잘못된 타입 → 400 테스트
-  - [ ] C-005: 빈 body → 400 테스트
-  - [ ] C-006: 잘못된 Content-Type → 에러 테스트
-  - [ ] I-011: projects+events 트랜잭션 롤백 테스트
+  - [x] CreateIntake Use Case 구현
+  - [x] POST /intakes FastAPI 라우터 구현
+  - [x] Pydantic 요청/응답 모델 정의
+  - [x] C-001: 유효한 intake_data → 201 테스트
+  - [x] C-002: intake_data 누락 → 400 테스트
+  - [x] C-003: 스키마 검증 실패 → 400 테스트
+  - [x] C-004: 잘못된 타입 → 400 테스트
+  - [x] C-005: 빈 body → 400 테스트
+  - [x] C-006: 잘못된 Content-Type → 에러 테스트
+  - [x] I-011: projects+events 트랜잭션 롤백 테스트
 - Result:
+  - `backend/src/application/usecases/create_intake.py` — CreateIntake use case (project+event 생성)
+  - `backend/src/adapters/api/intakes.py` — POST /intakes 라우터 (content-type 검증, validation, 트랜잭션 관리)
+  - `backend/src/adapters/api/schemas.py` — IntakeRequest, SuccessResponse, ErrorResponse Pydantic 모델
+  - 테스트: pytest 40 passed (unit 13 + contract 16 + integration 11: C-001~C-006, I-011)
 
 ### T006: POST /generate 엔드포인트 — Template Matching & Rendering
 - Status: Backlog
