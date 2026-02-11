@@ -171,18 +171,23 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 93 passed (unit 67 + contract 26)
 
 ### T007: POST /generate 엔드포인트 — ZIP 패키징 및 DB 업데이트
-- Status: Backlog
+- Status: Done
 - Service: backend_api
 - Description: 렌더링된 문서를 ZIP으로 패키징하고 DB 상태를 업데이트하는 로직 구현.
 - Acceptance Criteria:
-  - [ ] ZIP Packager 서비스 구현
-  - [ ] 생성 결과 ZIP 저장 및 zip_path 기록
-  - [ ] I-006: projects.status → generated 변경 테스트
-  - [ ] I-007: projects.zip_path 설정 테스트
-  - [ ] I-008: projects.generated_at 설정 테스트
-  - [ ] I-009: events에 generated 이벤트 테스트
-  - [ ] I-012: ZIP 생성 실패 시 트랜잭션 롤백 테스트
+  - [x] ZIP Packager 서비스 구현
+  - [x] 생성 결과 ZIP 저장 및 zip_path 기록
+  - [x] I-006: projects.status → generated 변경 테스트
+  - [x] I-007: projects.zip_path 설정 테스트
+  - [x] I-008: projects.generated_at 설정 테스트
+  - [x] I-009: events에 generated 이벤트 테스트
+  - [x] I-012: ZIP 생성 실패 시 트랜잭션 롤백 테스트
 - Result:
+  - `backend/src/application/services/zip_packager.py` — ZipPackager (in-memory ZIP 생성 → OUTPUT_DIR 저장)
+  - `backend/src/application/usecases/generate_documents.py` — ZipPackager 주입, zip_path+generated_at DB 저장
+  - `backend/src/adapters/api/generate.py` — ZipPackager 생성 및 use case 전달
+  - `backend/src/config/settings.py` — OUTPUT_DIR 설정 추가
+  - 테스트: pytest 109 passed (unit 67 + contract 26 + integration 16: I-006~I-009, I-012)
 
 ### T008: GET /projects/:id 엔드포인트 구현
 - Status: Backlog
