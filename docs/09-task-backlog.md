@@ -263,17 +263,25 @@ Backlog → Ready → In Progress → Done
   - 테스트: pytest 164 passed (unit 67 + contract 58 + security 22 + integration 17)
 
 ### T012: Web UI — 프로젝트 초기화 및 공통 레이아웃
-- Status: Backlog
+- Status: Done
 - Service: web_ui
 - Description: React 프로젝트 라우팅 설정, 공통 Layout 컴포넌트, API 클라이언트 레이어 구현.
 - Acceptance Criteria:
-  - [ ] React Router 설정 (/, /generate/:id, /complete/:id, 404 → / 리다이렉트)
-  - [ ] 공통 Layout 컴포넌트 (헤더/푸터)
-  - [ ] API 클라이언트 모듈 (환경변수 기반 base URL)
-  - [ ] V-011: 일관된 헤더/푸터 테스트
-  - [ ] V-012: 콘텐츠 영역 중앙 정렬 테스트
-  - [ ] E-012: 미존재 경로 → Survey 리다이렉트 테스트
+  - [x] React Router 설정 (/, /generate/:id, /complete/:id, 404 → / 리다이렉트)
+  - [x] 공통 Layout 컴포넌트 (헤더/푸터)
+  - [x] API 클라이언트 모듈 (환경변수 기반 base URL)
+  - [x] V-011: 일관된 헤더/푸터 테스트
+  - [x] V-012: 콘텐츠 영역 중앙 정렬 테스트
+  - [x] E-012: 미존재 경로 → Survey 리다이렉트 테스트
 - Result:
+  - `frontend/src/App.tsx` — React Router (/, /generate/:projectId, /complete/:projectId, * → Navigate /)
+  - `frontend/src/components/Layout.tsx` — header(banner) + main(mx-auto max-w-4xl) + footer(contentinfo)
+  - `frontend/src/api/client.ts` — postIntake, postGenerate, getProject, getDownloadUrl (VITE_API_URL 기반)
+  - `frontend/src/types/api.ts` — API 응답 타입 (ApiResponse<T>, IntakeData, ProjectData 등)
+  - `frontend/src/pages/` — SurveyPage, GeneratePage, CompletePage 플레이스홀더
+  - `frontend/src/main.tsx` — BrowserRouter 래핑
+  - 의존성 추가: react-router-dom, @testing-library/react, @testing-library/jest-dom, jsdom
+  - 테스트: vitest 22 passed (health 2 + navigation 5 + layout 9 + api-client 6: E-012, V-011, V-012)
 
 ### T013: Web UI — Survey 페이지 구현
 - Status: Backlog
